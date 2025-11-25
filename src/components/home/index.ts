@@ -1,0 +1,12 @@
+export { default as Hero } from './Hero';
+export { default as FeaturedProducts } from './FeaturedProducts';
+export { default as CategoryShowcase } from './CategoryShowcase';
+export { default as CouponSection } from './CouponSection';
+export { default as SaleSection } from './SaleSection';
+export { default as NewCollection } from './NewCollection';
+export { default as BrandLogos } from './BrandLogos';
+export { default as Testimonials } from './Testimonials';
+export { default as NewsSection } from './NewsSection';
+export { default as ServiceHighlights } from './ServiceHighlights';
+export { default as StorySection } from './StorySection';
+export { default as TikTokSection } from './TikTokSection';

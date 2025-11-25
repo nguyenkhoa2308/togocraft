@@ -1,6 +1,14 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import {
+  Geist,
+  Geist_Mono,
+  Pacifico,
+  Plus_Jakarta_Sans,
+} from "next/font/google";
 import "./globals.css";
+import { Footer, Header, NavigationBar, TopBar } from "@/components";
+import { ServiceHighlights } from "@/components/home";
+import Providers from "@/components/Providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -10,6 +18,17 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const pacifico = Pacifico({
+  weight: "400",
+  variable: "--font-pacifico",
+  subsets: ["latin"],
+});
+
+const plusJakartaSans = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  variable: "--font-plus-jakarta",
 });
 
 export const metadata: Metadata = {
@@ -23,11 +42,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${pacifico.variable} ${plusJakartaSans.variable} antialiased`}
       >
-        {children}
+        <Providers>
+          <TopBar />
+          <Header />
+          <NavigationBar />
+
+          <main className="min-h-screen">{children}</main>
+          <ServiceHighlights />
+          <Footer />
+        </Providers>
       </body>
     </html>
   );

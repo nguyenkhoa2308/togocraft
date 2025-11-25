@@ -22,5 +22,207 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-plus-jakarta), "Plus Jakarta Sans", -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",
+    serif, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+    "Noto Color Emoji";
+}
+
+@keyframes zoomOut {
+  0% {
+    transform: scale(1.5);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes slideIn {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  0% {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in {
+  animation: slideIn 0.3s ease-out;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.2s ease-out;
+}
+
+/* Smooth scrolling for anchor links */
+html {
+  /* scroll-behavior: smooth; */
+}
+
+/* Scroll margin for anchored headings (account for sticky header) */
+.scroll-mt-24 {
+  scroll-margin-top: 6rem;
+}
+
+/* Article section styling for news detail page */
+.article-section {
+  position: relative;
+  padding: 2rem 0;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.article-section:last-child {
+  border-bottom: none;
+}
+
+.article-section h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: none !important;
+}
+
+.article-section p {
+  color: #4b5563;
+  line-height: 1.8;
+  margin-bottom: 1rem;
+  font-size: 1.0625rem;
+}
+
+.article-section p:first-of-type {
+  font-size: 1.125rem;
+  color: #374151;
+}
+
+.article-section p strong {
+  color: #1f2937;
+  font-weight: 600;
+}
+
+/* Heading number styling for article content */
+.heading-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: linear-gradient(135deg, #c59263 0%, #a67b5b 100%);
+  color: white;
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(197, 146, 99, 0.3);
+}
+
+/* First paragraph after intro - drop cap style */
+.article-intro {
+  position: relative;
+  padding-left: 1.5rem;
+  border-left: 4px solid #c59263;
+  font-size: 1.125rem;
+  color: #4b5563;
+  font-style: italic;
+  margin-bottom: 2rem;
+}
+
+/* Article content wrapper */
+.article-content {
+  font-family: inherit;
+}
+
+/* Intro paragraph before first section */
+.article-content > p:first-child {
+  font-size: 1.125rem;
+  line-height: 1.9;
+  color: #374151;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* Collection page specific styles */
+.collection-title-script {
+  font-family: var(--font-pacifico), cursive;
+  font-size: 2rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #1f2937;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 768px) {
+  .collection-title-script {
+    font-size: 3rem;
+    line-height: 1.4;
+  }
+}
+
+.collection-section-title {
+  font-family: var(--font-pacifico), cursive;
+  font-size: 2rem;
+  font-weight: 400;
+  text-align: center;
+  color: #1f2937;
+  line-height: 1.5;
+}
+
+@media (min-width: 768px) {
+  .collection-section-title {
+    font-size: 2.75rem;
+  }
+}
+
+/* Collection content sections */
+.collection-content-section {
+  margin-bottom: 0;
+}
+
+.collection-content-section h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+}
+
+@media (min-width: 768px) {
+  .collection-content-section h3 {
+    font-size: 1.5rem;
+  }
+}
+
+.collection-content-section p {
+  font-size: 1rem;
+  line-height: 1.75;
+  color: #4b5563;
+  margin-bottom: 0;
+  text-align: justify;
+}
+
+@media (min-width: 768px) {
+  .collection-content-section p {
+    font-size: 1.0625rem;
+    line-height: 1.8;
+  }
 }
