@@ -639,6 +639,7 @@ const CollectionDetailPage = () => {
       {/* Quick View Dialog */}
       {quickViewProduct && (
         <QuickViewDialog
+          isOpen={true}
           product={quickViewProduct}
           onClose={() => setQuickViewProduct(null)}
         />
