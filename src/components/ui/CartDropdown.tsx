@@ -2,9 +2,10 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { X, Minus, Plus } from "lucide-react";
+import { X } from "lucide-react";
 import { useCartStore, useCartTotalPrice, useToastStore } from "@/stores";
 import ConfirmDialog from "./ConfirmDialog";
+import { getColorName, formatPricePerM2 } from "@/lib/utils/color-helper";
 
 interface CartDropdownProps {
   isOpen: boolean;
@@ -13,7 +14,6 @@ interface CartDropdownProps {
 const CartDropdown: React.FC<CartDropdownProps> = ({ isOpen }) => {
   const items = useCartStore((state) => state.items);
   const removeFromCart = useCartStore((state) => state.removeFromCart);
-  const updateQuantity = useCartStore((state) => state.updateQuantity);
   const totalPrice = useCartTotalPrice();
   const addToast = useToastStore((state) => state.addToast);
 
@@ -31,7 +31,9 @@ const CartDropdown: React.FC<CartDropdownProps> = ({ isOpen }) => {
     return new Intl.NumberFormat("vi-VN").format(price) + "đ";
   };
 
-  const handleRemoveClick = (item: typeof items[0]) => {
+  const handleRemoveClick = (e: React.MouseEvent, item: (typeof items)[0]) => {
+    e.preventDefault();
+    e.stopPropagation();
     setConfirmDialog({
       isOpen: true,
       itemId: item.id,
@@ -73,75 +75,58 @@ const CartDropdown: React.FC<CartDropdownProps> = ({ isOpen }) => {
               </div>
             ) : (
               <div className="p-4 space-y-4">
-                {items.map((item) => (
-                  <div
-                    key={`${item.id}-${item.selectedColor || ""}`}
-                    className="flex gap-3"
-                  >
-                    {/* Image */}
-                    <div className="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100">
-                      <img
-                        src={item.image}
-                        alt={item.name}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
+                {items.map((item) => {
+                  const unitPrice =
+                    parseInt(item.price.replace(/[^\d]/g, ""), 10) || 0;
 
-                    {/* Info */}
-                    <div className="flex-1 min-w-0">
-                      <h4 className="text-sm font-medium text-gray-800 line-clamp-1">
-                        {item.name}
-                      </h4>
-                      {item.selectedColor && (
-                        <div className="flex items-center gap-1 mt-0.5">
-                          <span
-                            className="w-3 h-3 rounded-full border border-gray-300"
-                            style={{ backgroundColor: item.selectedColor }}
-                          />
-                          <span className="text-xs text-gray-500">
-                            Màu đã chọn
-                          </span>
-                        </div>
-                      )}
+                  return (
+                    <Link
+                      key={`${item.id}-${item.selectedColor || ""}`}
+                      href={`/product/${item.slug}`}
+                      className="flex gap-3 group hover:bg-gray-50 rounded-lg p-1 -m-1 transition-colors"
+                    >
+                      {/* Image */}
+                      <div className="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100">
+                        <img
+                          src={item.image}
+                          alt={item.name}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                        />
+                      </div>
 
-                      {/* Quantity Controls */}
-                      <div className="flex items-center justify-between mt-2">
-                        <div className="flex items-center border border-gray-200 rounded-lg">
-                          <button
-                            onClick={() =>
-                              updateQuantity(item.id, item.quantity - 1)
-                            }
-                            className="p-1 bg-gray-100 hover:bg-gray-200 transition-colors text-black border-r border-gray-200 cursor-pointer"
-                          >
-                            <Minus size={14} />
-                          </button>
-                          <span className="px-3 text-sm font-medium text-black">
-                            {item.quantity}
-                          </span>
-                          <button
-                            onClick={() =>
-                              updateQuantity(item.id, item.quantity + 1)
-                            }
-                            className="p-1 bg-gray-100 hover:bg-gray-200 transition-colors text-black border-l border-gray-200 cursor-pointer"
-                          >
-                            <Plus size={14} />
-                          </button>
-                        </div>
-                        <span className="text-[#C59263] font-bold text-sm">
-                          {item.price}
+                      {/* Info */}
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-sm font-medium text-gray-800 line-clamp-1 group-hover:text-[#D97706] transition-colors">
+                          {item.name}
+                        </h4>
+                        {item.selectedColor && (
+                          <div className="flex items-center gap-1.5 mt-0.5">
+                            <span
+                              className="w-3 h-3 rounded-full border border-gray-300"
+                              style={{ backgroundColor: item.selectedColor }}
+                            />
+                            <span className="text-xs text-gray-500">
+                              {getColorName(item.selectedColor)}
+                            </span>
+                          </div>
+                        )}
+                        <span className="text-[#D97706] font-bold text-sm mt-1 block">
+                          {formatPricePerM2(formatPrice(unitPrice))}
                         </span>
                       </div>
-                    </div>
 
-                    {/* Remove Button */}
-                    <button
-                      onClick={() => handleRemoveClick(item)}
-                      className="p-1 rounded-full bg-red-400 hover:bg-red-500 transition-colors self-start cursor-pointer"
-                    >
-                      <X size={18} />
-                    </button>
-                  </div>
-                ))}
+                      {/* Remove Button */}
+                      <button
+                        type="button"
+                        onClick={(e) => handleRemoveClick(e, item)}
+                        className="p-1.5 rounded-full bg-red-100 hover:bg-red-500 hover:text-white text-red-500 transition-colors self-start cursor-pointer"
+                        title="Xóa sản phẩm"
+                      >
+                        <X size={14} />
+                      </button>
+                    </Link>
+                  );
+                })}
               </div>
             )}
           </div>
@@ -150,16 +135,16 @@ const CartDropdown: React.FC<CartDropdownProps> = ({ isOpen }) => {
           {items.length > 0 && (
             <div className="border-t border-gray-100 p-4 bg-gray-50">
               <div className="flex justify-between items-center mb-4">
-                <span className="text-gray-600">Tổng tiền:</span>
-                <span className="text-xl font-bold text-[#C59263]">
-                  {formatPrice(totalPrice)}
+                <span className="text-gray-600">Tổng tham khảo:</span>
+                <span className="text-xl font-bold text-[#D97706]">
+                  {formatPricePerM2(formatPrice(totalPrice))}
                 </span>
               </div>
               <Link
                 href="/cart"
-                className="block w-full bg-[#C59263] hover:bg-[#A67B4D] text-white text-center py-3 rounded-full font-semibold transition-colors"
+                className="block w-full bg-[#D97706] hover:bg-[#C77A06] text-white text-center py-3 rounded-full font-semibold transition-colors"
               >
-                Thanh toán
+                Xem giỏ hàng
               </Link>
             </div>
           )}

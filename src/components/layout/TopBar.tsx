@@ -1,23 +1,39 @@
-import React from 'react';
-import { Gift, MapPin, Phone } from 'lucide-react';
+import React from "react";
+import { MapPin, Mail, Phone } from "lucide-react";
+
+const contactInfo = {
+  address: "Ngọc Trục, Đại Mỗ, Nam Từ Liêm, Hà Nội",
+  email: "nhualaysangeverestlight@gmail.com",
+  phone: "0976.110.266",
+};
 
 const TopBar = () => {
   return (
-    <div className="bg-[#FDF6E9] border-b border-[#F0E6D2] text-xs md:text-sm py-2">
-      <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-2">
-        <div className="flex items-center gap-2 text-[#8B5E3C]">
-          <Gift size={16} />
-          <span>Tặng Thiệp và Gói Quà <span className="font-bold text-[#D97706]">MIỄN PHÍ</span> Cho Đơn Từ 2 Triệu</span>
+    <div className="hidden md:block bg-[#4A3B32] text-white text-xs">
+      <div className="container mx-auto px-4 py-2 flex justify-between items-center">
+        {/* Left - Address */}
+        <div className="flex items-center gap-2 text-white/90">
+          <MapPin size={14} className="text-[#D4AF37]" />
+          <span>{contactInfo.address}</span>
         </div>
-        <div className="flex items-center gap-6 text-[#6B5D52]">
-          <div className="flex items-center gap-1 cursor-pointer hover:text-[#8B5E3C]">
-            <Phone size={14} />
-            <span>1900 6750</span>
-          </div>
-          <div className="flex items-center gap-1 cursor-pointer hover:text-[#8B5E3C]">
-            <MapPin size={14} />
-            <span>Cửa hàng</span>
-          </div>
+
+        {/* Right - Contact */}
+        <div className="flex items-center gap-6">
+          <a
+            href={`mailto:${contactInfo.email}`}
+            className="flex items-center gap-2 text-white/90 hover:text-[#D4AF37] transition-colors"
+          >
+            <Mail size={14} className="text-[#D4AF37]" />
+            <span>{contactInfo.email}</span>
+          </a>
+
+          <a
+            href={`tel:${contactInfo.phone}`}
+            className="flex items-center gap-2 text-white/90 hover:text-[#D4AF37] transition-colors"
+          >
+            <Phone size={14} className="text-[#D4AF37]" />
+            <span className="font-semibold">{contactInfo.phone}</span>
+          </a>
         </div>
       </div>
     </div>

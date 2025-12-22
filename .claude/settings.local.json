@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir:*)",
+      "Bash(findstr:*)",
+      "Bash(npm run build:*)",
+      "Bash(powershell -Command \"Rename-Item -Path ''k:\\\\togocraft\\\\src\\\\app\\\\news'' -NewName ''_news''\")",
+      "Bash(cd /d k:togocraft)"
+    ]
+  }
+}

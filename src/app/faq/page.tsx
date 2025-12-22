@@ -1,15 +1,25 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
 import {
   ChevronDown,
   Search,
   ShoppingBag,
   Truck,
-  CreditCard,
   Package,
+  Wrench,
+  Shield,
+  Phone,
 } from "lucide-react";
 import { PageHero } from "@/components/ui";
+
+const contactInfo = {
+  phone: "0976.110.266",
+  zalo: "https://zalo.me/0976110266",
+  messenger: "https://m.me/tamnhualaysangpoly",
+};
 
 interface FAQItem {
   question: string;
@@ -18,138 +28,138 @@ interface FAQItem {
 }
 
 const faqData: FAQItem[] = [
+  // Sản phẩm
+  {
+    category: "product",
+    question: "Polycarbonate là gì? Có những loại nào?",
+    answer:
+      "Polycarbonate là loại nhựa kỹ thuật cao cấp, trong suốt như kính nhưng bền hơn gấp 200 lần. Everest Light cung cấp 3 loại chính: Tấm Polycarbonate Đặc (trong suốt hoàn toàn), Tấm Polycarbonate Sóng (dạng lượn sóng cho mái lợp), và Tấm Polycarbonate Rỗng (cấu trúc nhiều lớp cách nhiệt tốt).",
+  },
+  {
+    category: "product",
+    question: "Tấm polycarbonate có bền không? Tuổi thọ bao lâu?",
+    answer:
+      "Tấm polycarbonate Everest Light có tuổi thọ từ 10-15 năm tùy điều kiện sử dụng. Sản phẩm có lớp phủ chống UV, không bị ố vàng, giòn hay nứt vỡ theo thời gian như các loại nhựa thông thường.",
+  },
+  {
+    category: "product",
+    question: "Tấm polycarbonate có chống tia UV không?",
+    answer:
+      "Có, tất cả sản phẩm Everest Light đều có lớp phủ chống UV tiêu chuẩn Châu Âu, ngăn chặn 99.9% tia UV có hại. Lớp phủ này giúp bảo vệ không gian bên dưới và đảm bảo sản phẩm không bị ố vàng theo thời gian.",
+  },
+  {
+    category: "product",
+    question: "Tấm nào phù hợp cho giếng trời, mái che sân vườn?",
+    answer:
+      "Tấm Polycarbonate Rỗng là lựa chọn tốt nhất cho giếng trời và mái che sân vườn nhờ khả năng cách nhiệt tốt, trọng lượng nhẹ và độ truyền sáng cao. Có thể chọn độ dày từ 6mm-16mm tùy diện tích và yêu cầu cách nhiệt.",
+  },
+  {
+    category: "product",
+    question: "Tấm nào phù hợp cho nhà xưởng, nhà kho?",
+    answer:
+      "Tấm Polycarbonate Sóng là lựa chọn phổ biến cho nhà xưởng, nhà kho nhờ độ bền cao, dễ lắp đặt và giá thành hợp lý. Sóng ngói hoặc sóng vuông đều phù hợp tùy thiết kế mái hiện có.",
+  },
+  {
+    category: "product",
+    question: "Có những màu sắc và độ dày nào?",
+    answer:
+      "Everest Light cung cấp đa dạng màu sắc: Trong suốt, Trắng sữa, Xanh dương, Xanh lá, Xám khói, Nâu đồng... Độ dày từ 0.8mm đến 16mm tùy loại sản phẩm, đáp ứng mọi nhu cầu công trình.",
+  },
+
+  // Lắp đặt
+  {
+    category: "install",
+    question: "Tấm polycarbonate có dễ lắp đặt không?",
+    answer:
+      "Có, tấm polycarbonate rất dễ thi công. Sản phẩm nhẹ, có thể cắt bằng cưa hoặc dao, khoan lỗ dễ dàng. Everest Light cung cấp đầy đủ hướng dẫn lắp đặt và phụ kiện đồng bộ.",
+  },
+  {
+    category: "install",
+    question: "Cần những phụ kiện gì để lắp đặt?",
+    answer:
+      "Các phụ kiện cần thiết gồm: Nẹp nhôm hoặc nẹp nhựa (tùy loại tấm), Ron cao su chống thấm, Ốc vít inox có đệm cao su, Băng keo chống bụi dán đầu tấm. Everest Light cung cấp đầy đủ phụ kiện chính hãng.",
+  },
+  {
+    category: "install",
+    question: "Khoảng cách xà gồ tiêu chuẩn là bao nhiêu?",
+    answer:
+      "Khoảng cách xà gồ phụ thuộc vào độ dày tấm: Tấm 6mm: 60-70cm, Tấm 8mm: 80-90cm, Tấm 10mm: 100-110cm, Tấm 16mm: 120-140cm. Khuyến cáo tham khảo kỹ thuật viên trước khi thi công.",
+  },
+  {
+    category: "install",
+    question: "Everest Light có hỗ trợ lắp đặt không?",
+    answer:
+      "Everest Light cung cấp dịch vụ tư vấn kỹ thuật miễn phí và có đội ngũ đối tác thi công tại các tỉnh thành. Liên hệ hotline để được kết nối với nhà thầu uy tín tại khu vực của bạn.",
+  },
+
+  // Bảo hành
+  {
+    category: "warranty",
+    question: "Chính sách bảo hành như thế nào?",
+    answer:
+      "Everest Light bảo hành 10 năm cho tất cả sản phẩm tấm polycarbonate. Bảo hành bao gồm: không ố vàng, không giòn vỡ do lỗi sản xuất. Không bảo hành các trường hợp hư hỏng do thiên tai, lắp đặt sai kỹ thuật.",
+  },
+  {
+    category: "warranty",
+    question: "Quy trình bảo hành như thế nào?",
+    answer:
+      "Liên hệ hotline → Cung cấp hình ảnh/video sản phẩm lỗi, hóa đơn mua hàng → Kỹ thuật viên kiểm tra → Xác nhận bảo hành và xử lý trong 7-14 ngày làm việc.",
+  },
+  {
+    category: "warranty",
+    question: "Sản phẩm có chứng nhận chất lượng không?",
+    answer:
+      "Có, sản phẩm Everest Light đạt tiêu chuẩn Châu Âu (EU), có chứng nhận ISO 9001:2015, kiểm định độ bền va đập, khả năng chống UV và độ truyền sáng tại các phòng thí nghiệm uy tín.",
+  },
+
   // Đặt hàng
   {
     category: "order",
-    question: "Làm thế nào để đặt hàng trên website?",
+    question: "Làm thế nào để đặt hàng?",
     answer:
-      'Bạn có thể đặt hàng bằng cách: 1) Chọn sản phẩm và nhấn "Thêm vào giỏ hàng", 2) Xem giỏ hàng và điều chỉnh số lượng, 3) Nhấn "Thanh toán" và điền thông tin giao hàng, 4) Chọn phương thức thanh toán và xác nhận đơn hàng.',
+      "Có nhiều cách đặt hàng: 1) Liên hệ hotline 0976.110.266, 2) Gửi email đến nhualaysangeverestlight@gmail.com, 3) Liên hệ qua Zalo, 4) Đến trực tiếp văn phòng tại Hà Nội. Đội ngũ tư vấn sẽ hỗ trợ báo giá và đặt hàng.",
   },
   {
     category: "order",
-    question: "Tôi có thể đặt hàng qua điện thoại không?",
+    question: "Đơn hàng tối thiểu là bao nhiêu?",
     answer:
-      "Có, bạn có thể gọi đến hotline 1900-xxxx hoặc liên hệ trực tiếp với bộ phận chăm sóc khách hàng để được hỗ trợ đặt hàng.",
+      "Không giới hạn đơn hàng tối thiểu cho khách lẻ. Với đơn hàng lớn (từ 100m² trở lên) hoặc đại lý, vui lòng liên hệ trực tiếp để nhận báo giá ưu đãi.",
   },
   {
     category: "order",
-    question: "Tôi có thể thay đổi hoặc hủy đơn hàng không?",
+    question: "Có thể cắt theo kích thước yêu cầu không?",
     answer:
-      "Bạn có thể thay đổi hoặc hủy đơn hàng trong vòng 2 giờ sau khi đặt hàng. Vui lòng liên hệ ngay với bộ phận chăm sóc khách hàng để được hỗ trợ.",
-  },
-  {
-    category: "order",
-    question: "Đơn hàng của tôi đang ở đâu? Làm sao để theo dõi?",
-    answer:
-      'Bạn có thể theo dõi đơn hàng bằng cách: 1) Đăng nhập vào tài khoản và xem "Đơn hàng của tôi", 2) Sử dụng mã vận đơn được gửi qua email/SMS để tra cứu trên website đơn vị vận chuyển.',
+      "Có, Everest Light hỗ trợ cắt tấm theo kích thước yêu cầu của khách hàng. Phí cắt được tính dựa trên số lượng và độ phức tạp. Liên hệ để được báo giá chi tiết.",
   },
 
   // Vận chuyển
   {
     category: "shipping",
-    question: "Thời gian giao hàng là bao lâu?",
+    question: "Giao hàng đi tỉnh được không?",
     answer:
-      "Thời gian giao hàng phụ thuộc vào địa điểm: Nội thành Hà Nội 1-2 ngày, các tỉnh lân cận 2-3 ngày, các tỉnh thành khác 3-5 ngày, vùng sâu vùng xa 5-7 ngày làm việc.",
+      "Có, Everest Light giao hàng toàn quốc. Hà Nội và các tỉnh lân cận: 1-3 ngày. Miền Trung, Nam: 3-7 ngày tùy địa điểm. Phí vận chuyển được tính dựa trên khối lượng và khoảng cách.",
   },
   {
     category: "shipping",
-    question: "Phí vận chuyển là bao nhiêu?",
+    question: "Phí vận chuyển được tính như thế nào?",
     answer:
-      "Miễn phí vận chuyển cho đơn hàng từ 500.000đ. Đơn hàng dưới 500.000đ: phí 30.000đ (nội thành Hà Nội), 50.000đ - 100.000đ (các tỉnh khác).",
+      "Phí vận chuyển phụ thuộc vào khối lượng hàng và địa điểm giao. Miễn phí giao hàng nội thành Hà Nội cho đơn từ 5 triệu đồng. Liên hệ hotline để được báo phí vận chuyển chính xác.",
   },
   {
     category: "shipping",
-    question: "Tôi có thể chọn thời gian giao hàng không?",
+    question: "Hàng có được đóng gói cẩn thận không?",
     answer:
-      "Có, bạn có thể ghi chú thời gian mong muốn nhận hàng khi đặt hàng. Chúng tôi sẽ cố gắng sắp xếp phù hợp, tuy nhiên không đảm bảo 100% do phụ thuộc vào đơn vị vận chuyển.",
-  },
-  {
-    category: "shipping",
-    question: "Tôi có được kiểm tra hàng trước khi thanh toán không?",
-    answer:
-      "Có, bạn được quyền kiểm tra tình trạng bên ngoài của bưu kiện trước khi thanh toán. Tuy nhiên, không mở hàng để kiểm tra chi tiết.",
-  },
-
-  // Thanh toán
-  {
-    category: "payment",
-    question: "Có những phương thức thanh toán nào?",
-    answer:
-      "Chúng tôi hỗ trợ nhiều phương thức: 1) Thanh toán khi nhận hàng (COD), 2) Chuyển khoản ngân hàng, 3) Thanh toán qua ví điện tử (MoMo, ZaloPay), 4) Thanh toán qua thẻ tín dụng/ghi nợ.",
-  },
-  {
-    category: "payment",
-    question: "Thanh toán online có an toàn không?",
-    answer:
-      "Hoàn toàn an toàn. Chúng tôi sử dụng các cổng thanh toán uy tín có chứng nhận bảo mật quốc tế. Thông tin thẻ của bạn được mã hóa và không lưu trữ trên hệ thống của chúng tôi.",
-  },
-  {
-    category: "payment",
-    question: "Tôi có thể xin hóa đơn VAT không?",
-    answer:
-      "Có, vui lòng cung cấp thông tin công ty (Tên công ty, Mã số thuế, Địa chỉ) khi đặt hàng. Hóa đơn VAT sẽ được gửi kèm hàng hoặc qua email.",
-  },
-  {
-    category: "payment",
-    question: "Tôi thanh toán nhưng đơn hàng chưa được xác nhận?",
-    answer:
-      "Sau khi thanh toán, hệ thống cần 5-15 phút để xử lý. Nếu quá thời gian này mà chưa nhận được xác nhận, vui lòng liên hệ hotline để được kiểm tra.",
-  },
-
-  // Sản phẩm
-  {
-    category: "product",
-    question: "Sản phẩm được làm từ nguyên liệu gì?",
-    answer:
-      "Tất cả sản phẩm của chúng tôi được làm từ nguyên liệu tự nhiên như mây, tre, cói, lục bình... được thu hoạch từ các làng nghề truyền thống ở Việt Nam.",
-  },
-  {
-    category: "product",
-    question: "Làm thế nào để bảo quản sản phẩm mây tre?",
-    answer:
-      "Để sản phẩm ở nơi khô ráo, thoáng mát, tránh ánh nắng trực tiếp và độ ẩm cao. Vệ sinh định kỳ bằng khăn mềm hoặc bàn chải lông mềm. Không ngâm nước hoặc rửa trực tiếp.",
-  },
-  {
-    category: "product",
-    question: "Sản phẩm có được bảo hành không?",
-    answer:
-      "Có, sản phẩm được bảo hành từ 3-6 tháng tùy loại sản phẩm. Bảo hành các lỗi do nhà sản xuất, không bảo hành các trường hợp hư hỏng do tác động ngoại lực hoặc sử dụng không đúng cách.",
-  },
-  {
-    category: "product",
-    question: "Sản phẩm có thể sử dụng ngoài trời không?",
-    answer:
-      "Một số sản phẩm có thể sử dụng ngoài trời nhưng nên để ở vị trí có mái che, tránh mưa nắng trực tiếp. Nên mang vào trong nhà khi thời tiết xấu để sản phẩm bền lâu hơn.",
-  },
-
-  // Đổi trả
-  {
-    category: "return",
-    question: "Tôi có thể đổi trả sản phẩm không?",
-    answer:
-      "Có, chúng tôi chấp nhận đổi trả trong vòng 7 ngày với điều kiện sản phẩm còn nguyên vẹn, chưa qua sử dụng, còn đầy đủ bao bì, nhãn mác và hóa đơn.",
-  },
-  {
-    category: "return",
-    question: "Chi phí đổi trả do ai chịu?",
-    answer:
-      "Nếu sản phẩm bị lỗi do nhà sản xuất hoặc giao sai hàng, Sudes Craft sẽ chịu toàn bộ chi phí. Các trường hợp khác, khách hàng vui lòng chịu phí vận chuyển.",
-  },
-  {
-    category: "return",
-    question: "Quy trình đổi trả như thế nào?",
-    answer:
-      "Liên hệ hotline hoặc email → Cung cấp thông tin đơn hàng và lý do → Đóng gói sản phẩm cẩn thận → Gửi về địa chỉ được hướng dẫn → Chúng tôi kiểm tra và xử lý trong 3-5 ngày.",
+      "Có, tất cả sản phẩm được đóng gói cẩn thận với màng PE bảo vệ bề mặt, đệm xốp chống va đập và pallet gỗ cho đơn hàng lớn. Đảm bảo hàng đến tay khách hàng nguyên vẹn.",
   },
 ];
 
 const categories = [
   { id: "all", name: "Tất cả", icon: Package },
+  { id: "product", name: "Sản phẩm", icon: Package },
+  { id: "install", name: "Lắp đặt", icon: Wrench },
+  { id: "warranty", name: "Bảo hành", icon: Shield },
   { id: "order", name: "Đặt hàng", icon: ShoppingBag },
   { id: "shipping", name: "Vận chuyển", icon: Truck },
-  { id: "payment", name: "Thanh toán", icon: CreditCard },
-  { id: "product", name: "Sản phẩm", icon: Package },
-  { id: "return", name: "Đổi trả", icon: Package },
 ];
 
 const FAQPage = () => {
@@ -174,8 +184,8 @@ const FAQPage = () => {
     <div className="min-h-screen bg-[#FDFBF7] pb-20">
       <PageHero
         title="Câu Hỏi Thường Gặp"
-        subtitle="Tìm câu trả lời cho những thắc mắc của bạn"
-        backgroundImage="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1200&auto=format&fit=crop&q=80"
+        subtitle="Giải đáp thắc mắc về sản phẩm tấm lợp lấy sáng Polycarbonate"
+        breadcrumbs={[{ label: "FAQ" }]}
       />
 
       {/* Search Bar */}
@@ -191,7 +201,7 @@ const FAQPage = () => {
               placeholder="Tìm kiếm câu hỏi..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-4 border-2 border-gray-200 rounded-full focus:border-[#D97706] focus:outline-none text-gray-700"
+              className="w-full pl-12 pr-4 py-4 border-2 border-gray-300 rounded-full focus:border-[#D97706] focus:outline-none text-gray-800 placeholder:text-gray-400 bg-white"
             />
           </div>
         </div>
@@ -200,20 +210,21 @@ const FAQPage = () => {
       {/* Category Filter */}
       <section className="py-8">
         <div className="container mx-auto px-4">
-          <div className="flex flex-wrap gap-4 justify-center">
+          <div className="flex flex-wrap gap-3 justify-center">
             {categories.map((category) => {
               const Icon = category.icon;
               return (
                 <button
                   key={category.id}
+                  type="button"
                   onClick={() => setSelectedCategory(category.id)}
-                  className={`flex items-center gap-2 px-6 py-3 rounded-full font-medium transition-all ${
+                  className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-medium transition-all text-sm ${
                     selectedCategory === category.id
                       ? "bg-[#D97706] text-white shadow-lg"
-                      : "bg-white text-gray-700 hover:bg-gray-50"
+                      : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-200"
                   }`}
                 >
-                  <Icon size={18} />
+                  <Icon size={16} />
                   {category.name}
                 </button>
               );
@@ -233,36 +244,65 @@ const FAQPage = () => {
             </div>
           ) : (
             <div className="space-y-4">
-              {filteredFAQs.map((faq, index) => (
-                <div
-                  key={index}
-                  className="bg-white rounded-2xl shadow-md overflow-hidden transition-all hover:shadow-lg"
-                >
-                  <button
-                    onClick={() => toggleFAQ(index)}
-                    className="w-full flex items-center justify-between p-6 text-left"
-                  >
-                    <h3 className="text-lg font-bold text-[#4A3B32] pr-4">
-                      {faq.question}
-                    </h3>
-                    <ChevronDown
-                      size={24}
-                      className={`text-[#D97706] transition-transform flex-shrink-0 ${
-                        openIndex === index ? "rotate-180" : ""
-                      }`}
-                    />
-                  </button>
+              {filteredFAQs.map((faq, index) => {
+                const isOpen = openIndex === index;
+                return (
                   <div
-                    className={`overflow-hidden transition-all duration-300 ${
-                      openIndex === index ? "max-h-96" : "max-h-0"
+                    key={index}
+                    className={`bg-white rounded-2xl overflow-hidden transition-all duration-300 ease-out ${
+                      isOpen
+                        ? "shadow-xl ring-1 ring-[#D97706]/20"
+                        : "shadow-md hover:shadow-lg"
                     }`}
                   >
-                    <div className="px-6 pb-6 text-gray-700 leading-relaxed">
-                      {faq.answer}
+                    <button
+                      type="button"
+                      onClick={() => toggleFAQ(index)}
+                      className={`w-full flex items-center justify-between p-6 text-left transition-colors duration-200 ${
+                        isOpen ? "bg-[#FDF6E9]" : "hover:bg-gray-50"
+                      }`}
+                    >
+                      <h3
+                        className={`text-base font-bold pr-4 transition-colors duration-200 ${
+                          isOpen ? "text-[#D97706]" : "text-[#4A3B32]"
+                        }`}
+                      >
+                        {faq.question}
+                      </h3>
+                      <div
+                        className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-300 ease-out ${
+                          isOpen
+                            ? "bg-[#D97706] rotate-180"
+                            : "bg-gray-100 rotate-0"
+                        }`}
+                      >
+                        <ChevronDown
+                          size={18}
+                          className={`transition-colors duration-200 ${
+                            isOpen ? "text-white" : "text-[#D97706]"
+                          }`}
+                        />
+                      </div>
+                    </button>
+                    <div
+                      className="grid transition-all duration-300 ease-out"
+                      style={{
+                        gridTemplateRows: isOpen ? "1fr" : "0fr",
+                      }}
+                    >
+                      <div className="overflow-hidden">
+                        <div
+                          className={`px-6 pb-6 pt-2 text-gray-600 leading-relaxed text-sm transition-opacity duration-300 ${
+                            isOpen ? "opacity-100" : "opacity-0"
+                          }`}
+                        >
+                          {faq.answer}
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
@@ -275,23 +315,42 @@ const FAQPage = () => {
             Vẫn chưa tìm được câu trả lời?
           </h2>
           <p className="text-gray-600 mb-8">
-            Đừng lo lắng! Đội ngũ chăm sóc khách hàng của chúng tôi luôn sẵn
-            sàng hỗ trợ bạn
+            Đội ngũ tư vấn của Everest Light luôn sẵn sàng hỗ trợ bạn 24/7
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href="/contact"
-              className="inline-flex items-center justify-center gap-2 bg-[#D97706] text-white hover:bg-[#B45309] px-8 py-3 rounded-full font-bold transition-colors shadow-lg"
+          <div className="flex flex-wrap gap-4 justify-center">
+            <Link
+              href={`tel:${contactInfo.phone.replace(/\./g, "")}`}
+              className="inline-flex items-center justify-center gap-2 bg-[#D97706] text-white hover:bg-[#C77A06] px-6 py-3 rounded-full font-bold transition-colors shadow-lg"
             >
-              Liên hệ với chúng tôi
-            </a>
-            <a
-              href="tel:1900xxxx"
-              className="inline-flex items-center justify-center gap-2 bg-white text-[#D97706] border-2 border-[#D97706] hover:bg-[#D97706] hover:text-white px-8 py-3 rounded-full font-bold transition-all"
+              <Phone size={18} />
+              {contactInfo.phone}
+            </Link>
+            <Link
+              href={contactInfo.zalo}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 bg-[#0068FF] text-white hover:bg-[#0054CC] px-6 py-3 rounded-full font-bold transition-colors shadow-lg"
             >
-              Hotline: 1900-xxxx
-            </a>
+              <Image src="/icons/zalo_icon.svg" alt="Zalo" width={20} height={20} />
+              Zalo
+            </Link>
+            <Link
+              href={contactInfo.messenger}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[#00B2FF] to-[#006AFF] text-white hover:opacity-90 px-6 py-3 rounded-full font-bold transition-colors shadow-lg"
+            >
+              <Image src="/icons/messenger_icon.svg" alt="Messenger" width={20} height={20} />
+              Messenger
+            </Link>
           </div>
+          <p className="text-gray-500 text-sm mt-6">
+            Hoặc{" "}
+            <Link href="/contact" className="text-[#D97706] hover:underline font-semibold">
+              để lại thông tin
+            </Link>
+            , chúng tôi sẽ liên hệ lại ngay
+          </p>
         </div>
       </section>
     </div>

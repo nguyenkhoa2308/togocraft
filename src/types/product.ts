@@ -1,11 +1,14 @@
 export interface Product {
   id: number;
+  slug?: string; // Real slug from data
   name: string;
   price: string;
   oldPrice?: string;
   discount?: string;
   image: string;
   colors?: string[];
+  bestSeller?: boolean; // Sản phẩm bán chạy - sắp xếp lên đầu
+  sortOrder?: number; // Thứ tự sắp xếp (số nhỏ = ưu tiên cao)
 }
 
 // Chi tiết sản phẩm

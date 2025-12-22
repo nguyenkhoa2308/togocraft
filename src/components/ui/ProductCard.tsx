@@ -2,8 +2,9 @@
 
 import React from "react";
 import Link from "next/link";
-import { Heart, ShoppingBag, Settings } from "lucide-react";
-import { useCartStore, useWishlistStore, useToastStore } from "@/stores";
+import { Heart, ShoppingBag, Settings, Flame } from "lucide-react";
+import { useCartStore, useWishlistStore, useToastStore, useIsInCart } from "@/stores";
+import { getColorName } from "@/lib/data/polycarbonate-data";
 
 // Helper function to generate slug from product name
 const generateSlug = (name: string, id: string | number): string => {
@@ -22,6 +23,7 @@ const generateSlug = (name: string, id: string | number): string => {
 
 export interface Product {
   id: number | string;
+  slug?: string; // Real slug from data, if available
   name: string;
   price: string;
   oldPrice?: string;
@@ -31,6 +33,8 @@ export interface Product {
   colorImages?: Record<string, string>;
   sold?: number;
   categoryId?: string;
+  bestSeller?: boolean;
+  sortOrder?: number;
 }
 
 interface ProductCardProps {
@@ -48,6 +52,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }) => {
     state.items.some((item) => item.id === product.id)
   );
   const addToast = useToastStore((state) => state.addToast);
+  const isInCart = useIsInCart();
 
   // Reset state when product changes
   React.useEffect(() => {
@@ -64,15 +69,28 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }) => {
     }
   };
 
+  // Use real slug from data if available, otherwise generate from name
+  const productSlug = product.slug || generateSlug(product.name, product.id);
+
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+
+    const colorToAdd = selectedColor || undefined;
+
+    // Check if item with same color already in cart
+    if (isInCart(product.id, colorToAdd)) {
+      addToast(`Sản phẩm này đã có trong giỏ hàng`, "info");
+      return;
+    }
+
     addToCart({
       id: product.id,
+      slug: productSlug,
       name: product.name,
       price: product.price,
       image: currentImage,
-      selectedColor: selectedColor || undefined,
+      selectedColor: colorToAdd,
     });
     addToast(`Đã thêm "${product.name}" vào giỏ hàng`, "success");
   };
@@ -83,6 +101,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }) => {
     const wasWishlisted = isWishlisted;
     toggleWishlist({
       id: product.id,
+      slug: productSlug,
       name: product.name,
       price: product.price,
       oldPrice: product.oldPrice,
@@ -95,8 +114,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }) => {
     }
   };
 
-  const productSlug = generateSlug(product.name, product.id);
-
   return (
     <Link
       href={`/product/${productSlug}`}
@@ -106,31 +123,41 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }) => {
       <div className="aspect-square w-full relative p-2">
         <div className="w-full h-full rounded-xl overflow-hidden relative">
           <img
-            // src={currentImage}
-            src="https://bizweb.dktcdn.net/thumb/large/100/608/033/products/e6408c60-e714-4885-a112-63079cd37c0d.jpg?v=1760493461697"
+            src={currentImage}
+            // src="https://bizweb.dktcdn.net/thumb/large/100/608/033/products/e6408c60-e714-4885-a112-63079cd37c0d.jpg?v=1760493461697"
             alt={product.name}
-            className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105"
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
         </div>
 
-        {/* Discount Badge */}
-        {product.discount && (
-          <div
-            className="absolute top-2 left-2 z-10 flex items-center justify-center text-white font-bold pr-2"
-            style={{
-              backgroundImage: "url('/images/tag-sale.webp')",
-              backgroundRepeat: "no-repeat",
-              backgroundPosition: "center center",
-              backgroundSize: "contain",
-              width: "63px",
-              height: "auto",
-              aspectRatio: "63 / 24",
-              fontSize: "12px",
-            }}
-          >
-            {product.discount}
-          </div>
-        )}
+        {/* Badges */}
+        <div className="absolute top-3 left-3 z-10 flex flex-col gap-1.5">
+          {/* Bestseller Badge */}
+          {product.bestSeller && (
+            <span className="inline-flex items-center gap-1 bg-gradient-to-r from-[#DC2626] to-[#F97316] text-white text-xs font-bold px-2.5 py-1.5 rounded-md shadow-md">
+              <Flame size={14} className="animate-pulse" />
+              Bán chạy
+            </span>
+          )}
+          {/* Discount Badge */}
+          {product.discount && (
+            <div
+              className="flex items-center justify-center text-white font-bold pr-2"
+              style={{
+                backgroundImage: "url('/images/tag-sale.webp')",
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "center center",
+                backgroundSize: "contain",
+                width: "63px",
+                height: "auto",
+                aspectRatio: "63 / 24",
+                fontSize: "12px",
+              }}
+            >
+              {product.discount}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Product Info Overlay */}
@@ -150,14 +177,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }) => {
                       : ""
                   }`}
                   style={{ backgroundColor: color }}
-                  title={color}
+                  title={getColorName(color)}
                 />
               ))}
             </div>
           </div>
         )}
 
-        <h3 className="font-medium text-gray-800 text-base mb-1 line-clamp-2 px-2 flex items-center justify-center group-hover:text-[#C59263] transition-colors">
+        <h3 className="font-medium text-gray-800 text-base mb-1 line-clamp-2 md:line-clamp-none px-2 text-center group-hover:text-[#C59263] transition-colors">
           {product.name}
         </h3>
 

@@ -1,320 +1,345 @@
 "use client";
 
-import React, { useState } from "react";
-import {
-  MapPin,
-  Phone,
-  Mail,
-  Clock,
-  Send,
-  MessageSquare,
-  Facebook,
-  Instagram,
-} from "lucide-react";
+import Link from "next/link";
+import Image from "next/image";
+import { Phone, Mail, MapPin, Send, Globe } from "lucide-react";
+import { useState } from "react";
 import { PageHero } from "@/components/ui";
 
-const ContactPage = () => {
+const contactInfo = {
+  phone: "0976.110.266",
+  email: "nhualaysangeverestlight@gmail.com",
+  address: "Ngọc Trục, Đại Mỗ, Nam Từ Liêm, Hà Nội",
+  zalo: "https://zalo.me/0976110266",
+  messenger: "https://m.me/tamnhualaysangpoly",
+};
+
+export default function ContactPage() {
   const [formData, setFormData] = useState({
     name: "",
-    email: "",
     phone: "",
+    email: "",
     subject: "",
     message: "",
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log("Form submitted:", formData);
-    alert(
-      "Cảm ơn bạn đã liên hệ! Chúng tôi sẽ phản hồi trong thời gian sớm nhất."
-    );
-    setFormData({ name: "", email: "", phone: "", subject: "", message: "" });
-  };
-
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    console.log(formData);
+    alert("Cảm ơn bạn đã gửi thông tin. Chúng tôi sẽ liên hệ lại sớm nhất!");
   };
 
   return (
     <div className="min-h-screen bg-[#FDFBF7] pb-20">
-      <PageHero
-        title="Liên Hệ"
-        subtitle="Chúng tôi luôn sẵn sàng lắng nghe bạn"
-        backgroundImage="https://images.unsplash.com/photo-1534536281715-e28d76689b4d?w=1200&auto=format&fit=crop&q=80"
-      />
+      <PageHero title="Liên hệ" breadcrumbs={[{ label: "Liên hệ" }]} />
 
-      {/* Contact Info Cards */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-            <div className="bg-white rounded-2xl p-6 text-center shadow-md hover:shadow-lg transition-shadow">
-              <div className="w-14 h-14 bg-[#D97706] rounded-full flex items-center justify-center mx-auto mb-4">
-                <MapPin className="text-white" size={28} />
+      {/* Contact Info Bar - Overlapping */}
+      <section className="relative z-20 -mt-16 px-4">
+        <div className="container mx-auto">
+          <div className="bg-white rounded-xl shadow-lg p-6">
+            <div className="flex flex-col 2xl:flex-row lg:items-center lg:justify-between gap-6">
+              {/* Brand Name */}
+              <div className="text-center 2xl:text-left">
+                <p className="text-gray-600">Liên hệ với chúng tôi,</p>
+                <p className="text-[17px] lg:text-xl font-bold bg-gradient-to-r from-[#996515] to-[#D4AF37] bg-clip-text text-transparent">
+                  Everest Light - Tấm Nhựa Lấy Sáng
+                </p>
               </div>
-              <h3 className="text-lg font-bold text-[#4A3B32] mb-2">Địa chỉ</h3>
-              <p className="text-gray-600 text-sm">
-                123 Phố Hàng Bông
-                <br />
-                Quận Hoàn Kiếm, Hà Nội
-              </p>
-            </div>
 
-            <div className="bg-white rounded-2xl p-6 text-center shadow-md hover:shadow-lg transition-shadow">
-              <div className="w-14 h-14 bg-[#C59263] rounded-full flex items-center justify-center mx-auto mb-4">
-                <Phone className="text-white" size={28} />
-              </div>
-              <h3 className="text-lg font-bold text-[#4A3B32] mb-2">
-                Điện thoại
-              </h3>
-              <p className="text-gray-600 text-sm">
-                Hotline: 1900-xxxx
-                <br />
-                Mobile: 0912-345-678
-              </p>
-            </div>
+              {/* Contact Items */}
+              <div className="flex flex-wrap justify-start sm:justify-center lg:justify-end gap-6 lg:gap-8">
+                {/* Hotline */}
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-full border-2 border-[#3b2410] flex items-center justify-center">
+                    <Phone className="w-5 h-5 text-[#3b2410]" />
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Hotline</p>
+                    <p className="font-bold text-gray-800">0976.110.266</p>
+                  </div>
+                </div>
 
-            <div className="bg-white rounded-2xl p-6 text-center shadow-md hover:shadow-lg transition-shadow">
-              <div className="w-14 h-14 bg-[#8B4513] rounded-full flex items-center justify-center mx-auto mb-4">
-                <Mail className="text-white" size={28} />
-              </div>
-              <h3 className="text-lg font-bold text-[#4A3B32] mb-2">Email</h3>
-              <p className="text-gray-600 text-sm">
-                contact@sudescraft.com
-                <br />
-                support@sudescraft.com
-              </p>
-            </div>
+                {/* Email */}
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-full border-2 border-[#3b2410] flex items-center justify-center">
+                    <Mail className="w-5 h-5 text-[#3b2410]" />
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Email</p>
+                    <p className="font-bold text-gray-800">
+                      nhualaysangeverestlight@gmail.com
+                    </p>
+                  </div>
+                </div>
 
-            <div className="bg-white rounded-2xl p-6 text-center shadow-md hover:shadow-lg transition-shadow">
-              <div className="w-14 h-14 bg-[#A0522D] rounded-full flex items-center justify-center mx-auto mb-4">
-                <Clock className="text-white" size={28} />
+                {/* Website */}
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-full border-2 border-[#3b2410] flex items-center justify-center">
+                    <Globe className="w-5 h-5 text-[#3b2410]" />
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Website</p>
+                    <p className="font-bold text-gray-800">
+                      nhualaysangeverestlight.com
+                    </p>
+                  </div>
+                </div>
               </div>
-              <h3 className="text-lg font-bold text-[#4A3B32] mb-2">
-                Giờ làm việc
-              </h3>
-              <p className="text-gray-600 text-sm">
-                T2 - T6: 8:00 - 18:00
-                <br />
-                T7 - CN: 9:00 - 17:00
-              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Contact Form & Map */}
-      <section className="py-16 bg-white">
+      {/* Main Content */}
+      <section className="py-12">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
-            {/* Contact Form */}
+          <div className="grid lg:grid-cols-2 gap-12">
+            {/* Left - Contact Info & Social */}
             <div>
-              <div className="mb-8">
-                <div className="flex items-center gap-3 mb-4">
-                  <MessageSquare className="text-[#D97706]" size={32} />
-                  <h2 className="text-3xl font-[family-name:var(--font-pacifico)] text-[#4A3B32]">
-                    Gửi tin nhắn
-                  </h2>
+              <p className="text-[#D97706] font-semibold tracking-wide uppercase mb-2">
+                THÔNG TIN LIÊN HỆ
+              </p>
+              <h2 className="text-3xl md:text-4xl font-[family-name:var(--font-pacifico)] text-[#4A3B32] mb-6">
+                Liên hệ với chúng tôi
+              </h2>
+              <p className="text-gray-600 mb-8 leading-relaxed">
+                Mọi thông tin đặt hàng, tư vấn báo giá hoặc hợp tác kinh doanh,
+                vui lòng liên hệ với chúng tôi qua các kênh dưới đây:
+              </p>
+
+              {/* Contact Methods */}
+              <div className="space-y-4 mb-8">
+                <div className="flex items-center gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                  <div className="w-12 h-12 bg-[#D97706] rounded-full flex items-center justify-center flex-shrink-0">
+                    <Phone className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Hotline tư vấn</p>
+                    <Link
+                      href={`tel:${contactInfo.phone.replace(/\./g, "")}`}
+                      className="font-bold text-[#4A3B32] hover:text-[#D97706] transition-colors"
+                    >
+                      {contactInfo.phone}
+                    </Link>
+                  </div>
                 </div>
-                <p className="text-gray-600">
-                  Vui lòng điền thông tin vào form bên dưới, chúng tôi sẽ phản
-                  hồi trong vòng 24 giờ
-                </p>
+
+                <div className="flex items-center gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                  <div className="w-12 h-12 bg-[#D97706] rounded-full flex items-center justify-center flex-shrink-0">
+                    <Mail className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Email</p>
+                    <Link
+                      href={`mailto:${contactInfo.email}`}
+                      className="font-bold text-[#4A3B32] hover:text-[#D97706] transition-colors break-all"
+                    >
+                      {contactInfo.email}
+                    </Link>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                  <div className="w-12 h-12 bg-[#D97706] rounded-full flex items-center justify-center flex-shrink-0">
+                    <MapPin className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Địa chỉ</p>
+                    <p className="font-bold text-[#4A3B32]">
+                      {contactInfo.address}
+                    </p>
+                  </div>
+                </div>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Họ và tên <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-[#D97706] focus:outline-none transition-colors"
-                    placeholder="Nhập họ và tên của bạn"
+              {/* Social Buttons */}
+              <div className="flex flex-wrap gap-3">
+                <Link
+                  href={contactInfo.zalo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-[#0068FF] hover:bg-[#0054CC] text-white px-5 py-3 rounded-full font-semibold transition-colors"
+                >
+                  <Image
+                    src="/icons/zalo_icon.svg"
+                    alt="Zalo"
+                    width={20}
+                    height={20}
                   />
-                </div>
+                  Chat Zalo
+                </Link>
+                <Link
+                  href={contactInfo.messenger}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-gradient-to-r from-[#00B2FF] to-[#006AFF] hover:opacity-90 text-white px-5 py-3 rounded-full font-semibold transition-colors"
+                >
+                  <Image
+                    src="/icons/messenger_icon.svg"
+                    alt="Messenger"
+                    width={20}
+                    height={20}
+                  />
+                  Messenger
+                </Link>
+                <Link
+                  href="https://www.facebook.com/tamnhualaysangpoly/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-[#1877F2] hover:bg-[#166FE5] text-white px-5 py-3 rounded-full font-semibold transition-colors"
+                >
+                  <Image
+                    src="/icons/facebook_icon.svg"
+                    alt="Facebook"
+                    width={20}
+                    height={20}
+                  />
+                  Facebook
+                </Link>
+              </div>
+            </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {/* Right - Contact Form */}
+            <div className="bg-white rounded-2xl shadow-lg p-8">
+              <h2 className="text-2xl font-bold text-[#4A3B32] mb-2">
+                Gửi yêu cầu tư vấn
+              </h2>
+              <p className="text-gray-600 mb-6">
+                Để lại thông tin, chúng tôi sẽ liên hệ tư vấn và báo giá trong
+                thời gian sớm nhất.
+              </p>
+
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="grid sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Email <span className="text-red-500">*</span>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Họ và tên <span className="text-red-500">*</span>
                     </label>
                     <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
+                      type="text"
+                      placeholder="Nhập họ và tên"
+                      value={formData.name}
+                      onChange={(e) =>
+                        setFormData({ ...formData, name: e.target.value })
+                      }
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D97706] focus:border-transparent transition-all text-gray-800 placeholder:text-gray-400 bg-white"
                       required
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-[#D97706] focus:outline-none transition-colors"
-                      placeholder="email@example.com"
                     />
                   </div>
-
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Số điện thoại
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Số điện thoại <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="tel"
-                      name="phone"
+                      placeholder="Nhập số điện thoại"
                       value={formData.phone}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-[#D97706] focus:outline-none transition-colors"
-                      placeholder="0912 345 678"
+                      onChange={(e) =>
+                        setFormData({ ...formData, phone: e.target.value })
+                      }
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D97706] focus:border-transparent transition-all text-gray-800 placeholder:text-gray-400 bg-white"
+                      required
                     />
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Chủ đề <span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    name="subject"
-                    value={formData.subject}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-[#D97706] focus:outline-none transition-colors"
-                  >
-                    <option value="">Chọn chủ đề</option>
-                    <option value="product">Thông tin sản phẩm</option>
-                    <option value="order">Đặt hàng</option>
-                    <option value="shipping">Vận chuyển</option>
-                    <option value="return">Đổi trả</option>
-                    <option value="warranty">Bảo hành</option>
-                    <option value="partnership">Hợp tác kinh doanh</option>
-                    <option value="other">Khác</option>
-                  </select>
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      placeholder="Nhập email"
+                      value={formData.email}
+                      onChange={(e) =>
+                        setFormData({ ...formData, email: e.target.value })
+                      }
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D97706] focus:border-transparent transition-all text-gray-800 placeholder:text-gray-400 bg-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Mục đích liên hệ
+                    </label>
+                    <div className="relative">
+                      <select
+                        value={formData.subject}
+                        onChange={(e) =>
+                          setFormData({ ...formData, subject: e.target.value })
+                        }
+                        title="Chọn mục đích liên hệ"
+                        className="w-full px-4 py-3 pr-10 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D97706] focus:border-transparent transition-all text-gray-800 bg-white appearance-none cursor-pointer"
+                      >
+                        <option value="">Chọn mục đích</option>
+                        <option value="bao-gia">Báo giá sản phẩm</option>
+                        <option value="tu-van">Tư vấn kỹ thuật</option>
+                        <option value="dai-ly">Hợp tác đại lý</option>
+                        <option value="khac">Khác</option>
+                      </select>
+                      <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                        <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
                     Nội dung <span className="text-red-500">*</span>
                   </label>
                   <textarea
-                    name="message"
+                    placeholder="Nhập nội dung yêu cầu (loại sản phẩm, số lượng, địa chỉ giao hàng...)"
+                    rows={5}
                     value={formData.message}
-                    onChange={handleChange}
+                    onChange={(e) =>
+                      setFormData({ ...formData, message: e.target.value })
+                    }
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D97706] focus:border-transparent transition-all resize-none text-gray-800 placeholder:text-gray-400 bg-white"
                     required
-                    rows={6}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-[#D97706] focus:outline-none transition-colors resize-none"
-                    placeholder="Nhập nội dung bạn muốn gửi..."
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full flex items-center justify-center gap-2 bg-[#D97706] text-white hover:bg-[#B45309] px-8 py-4 rounded-full font-bold transition-colors shadow-lg hover:shadow-xl"
+                  className="w-full bg-[#D97706] hover:bg-[#C77A06] text-white py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-colors shadow-lg hover:shadow-xl"
                 >
-                  <Send size={20} />
-                  Gửi tin nhắn
+                  <Send className="w-5 h-5" />
+                  Gửi yêu cầu tư vấn
                 </button>
               </form>
-            </div>
-
-            {/* Map & Social */}
-            <div className="space-y-8">
-              {/* Google Map */}
-              <div>
-                <h3 className="text-2xl font-[family-name:var(--font-pacifico)] text-[#4A3B32] mb-4">
-                  Tìm chúng tôi
-                </h3>
-                <div className="rounded-2xl overflow-hidden shadow-lg h-[400px]">
-                  <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3724.096811147481!2d105.84117731533404!3d21.02879919316048!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ab953357c995%3A0x4da9c8ddb21098ce!2zSMOgbmcgQuG7k25nLCBIb8OgbiBLaeG6v20sIEjDoCBO4buZaSwgVmlldG5hbQ!5e0!3m2!1sen!2s!4v1635000000000!5m2!1sen!2s"
-                    width="100%"
-                    height="100%"
-                    style={{ border: 0 }}
-                    allowFullScreen
-                    loading="lazy"
-                  />
-                </div>
-              </div>
-
-              {/* Social Media */}
-              <div>
-                <h3 className="text-2xl font-[family-name:var(--font-pacifico)] text-[#4A3B32] mb-4">
-                  Kết nối với chúng tôi
-                </h3>
-                <div className="flex gap-4">
-                  <a
-                    href="https://facebook.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-3 bg-[#1877F2] text-white px-6 py-3 rounded-full hover:bg-[#165EC7] transition-colors"
-                  >
-                    <Facebook size={20} />
-                    <span className="font-medium">Facebook</span>
-                  </a>
-                  <a
-                    href="https://instagram.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-3 bg-gradient-to-r from-[#E1306C] to-[#C13584] text-white px-6 py-3 rounded-full hover:opacity-90 transition-opacity"
-                  >
-                    <Instagram size={20} />
-                    <span className="font-medium">Instagram</span>
-                  </a>
-                </div>
-              </div>
-
-              {/* Store Info */}
-              <div className="bg-[#FDF6E9] rounded-2xl p-6">
-                <h3 className="text-xl font-bold text-[#4A3B32] mb-4">
-                  Cửa hàng trưng bày
-                </h3>
-                <div className="space-y-3 text-gray-700">
-                  <p>
-                    <strong>Showroom Hà Nội:</strong>
-                    <br />
-                    123 Phố Hàng Bông, Hoàn Kiếm, Hà Nội
-                  </p>
-                  <p>
-                    <strong>Showroom TP.HCM:</strong>
-                    <br />
-                    456 Đường Lê Lợi, Quận 1, TP.HCM
-                  </p>
-                  <p className="text-sm text-gray-600 mt-4">
-                    Ghé thăm showroom để trải nghiệm trực tiếp sản phẩm và nhận
-                    tư vấn từ đội ngũ chuyên nghiệp của chúng tôi.
-                  </p>
-                </div>
-              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* FAQ Quick Link */}
-      <section className="py-16">
-        <div className="container mx-auto px-4 max-w-3xl text-center">
-          <h2 className="text-3xl font-[family-name:var(--font-pacifico)] text-[#4A3B32] mb-4">
-            Câu hỏi thường gặp
-          </h2>
-          <p className="text-gray-600 mb-8">
-            Có thể câu trả lời bạn cần đã có sẵn trong mục Câu hỏi thường gặp
-          </p>
-          <a
-            href="/faq"
-            className="inline-flex items-center justify-center gap-2 bg-white text-[#D97706] border-2 border-[#D97706] hover:bg-[#D97706] hover:text-white px-8 py-3 rounded-full font-bold transition-all shadow-md"
-          >
-            Xem câu hỏi thường gặp
-          </a>
+      {/* Google Map */}
+      <section className="py-12 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-8">
+            <p className="text-[#D97706] font-semibold tracking-wide uppercase mb-2">
+              BẢN ĐỒ
+            </p>
+            <h2 className="text-3xl font-[family-name:var(--font-pacifico)] text-[#4A3B32]">
+              Vị trí của chúng tôi
+            </h2>
+          </div>
+          <div className="rounded-2xl overflow-hidden shadow-lg">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d1343.5808081052633!2d105.7682310972573!3d20.98611531548671!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMjDCsDU5JzEwLjEiTiAxMDXCsDQ2JzA1LjYiRQ!5e1!3m2!1sen!2s!4v1764660022570!5m2!1sen!2s"
+              width="100%"
+              height="450"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Everest Light Location"
+            ></iframe>
+          </div>
         </div>
       </section>
     </div>
   );
-};
-
-export default ContactPage;
+}

@@ -1,160 +1,271 @@
-import React from 'react';
-import { Send, MapPin, Phone, Mail, ChevronUp, MessageCircle } from 'lucide-react';
+"use client";
+
+import Link from "next/link";
+import { MapPin, Phone, Mail, Globe, Clock, ChevronRight } from "lucide-react";
+import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
+
+// Hook for count-up animation
+function useCountUp(end: number, duration: number = 2000) {
+  const [count, setCount] = useState(0);
+  const [hasStarted, setHasStarted] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const currentRef = ref.current;
+    if (!currentRef) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setHasStarted(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    observer.observe(currentRef);
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!hasStarted) return;
+
+    let startTime: number;
+    let animationFrame: number;
+
+    const animate = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+
+      // Easing function for smooth animation
+      const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+      setCount(Math.floor(easeOutQuart * end));
+
+      if (progress < 1) {
+        animationFrame = requestAnimationFrame(animate);
+      }
+    };
+
+    animationFrame = requestAnimationFrame(animate);
+
+    return () => cancelAnimationFrame(animationFrame);
+  }, [hasStarted, end, duration]);
+
+  return { count, ref };
+}
+
+// Stats Counter Component
+function StatCounter({ number, label }: { number: string; label: string }) {
+  // Parse the number (remove + and other non-numeric characters)
+  const numericValue = parseInt(number.replace(/[^0-9]/g, ""), 10);
+  const suffix = number.replace(/[0-9]/g, "");
+
+  const { count, ref } = useCountUp(numericValue, 2000);
+
+  return (
+    <div ref={ref} className="flex flex-col items-center">
+      <div className="text-4xl md:text-5xl font-bold font-oswald">
+        {count}
+        {suffix}
+      </div>
+      <div className="text-sm md:text-base mt-1 opacity-90">{label}</div>
+    </div>
+  );
+}
+
+const productLinks = [
+  { name: "Tấm Polycarbonate Đặc Ruột", href: "/categories/polycarbonate_dac" },
+  { name: "Tấm Polycarbonate Rỗng", href: "/categories/polycarbonate_rong" },
+  { name: "Tấm Polycarbonate Sóng", href: "/categories/polycarbonate_song" },
+  { name: "Phụ Kiện Lắp Đặt", href: "/categories/phu_kien" },
+];
+
+const companyLinks = [
+  { name: "Trang chủ", href: "/" },
+  { name: "Giới thiệu", href: "/about" },
+  { name: "Sản phẩm", href: "/categories/all" },
+  { name: "Chính sách", href: "/policies" },
+  { name: "Hỏi đáp", href: "/faq" },
+  { name: "Liên hệ", href: "/contact" },
+];
 
 export default function Footer() {
   return (
-    <footer className="bg-[#1a1a1a] text-white pt-24 pb-8 overflow-hidden">
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mb-12">
-          {/* Column 1: Brand & Contact */}
-          <div className="md:col-span-4 space-y-6">
-            <div className="flex items-center gap-2">
-               {/* Logo Placeholder - replacing with text/icon if no image */}
-               <div className="text-[#D97706]">
-                 <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                   <rect width="40" height="40" rx="8" fill="currentColor"/>
-                   <path d="M20 10L30 20L20 30L10 20L20 10Z" fill="white"/>
-                 </svg>
-               </div>
-               <div>
-                 <h3 className="text-2xl font-[family-name:var(--font-pacifico)] text-[#D97706]">Sudes Craft</h3>
-                 <p className="text-xs text-gray-400">Từng chi tiết, gửi gắm yêu thương</p>
-               </div>
-            </div>
-            
-            <p className="text-gray-400 text-sm leading-relaxed">
-              Sudes Craft – thương hiệu decor thủ công từ tre, mây và gỗ, mang đến những sản phẩm trang trí và gia dụng tự nhiên, tinh tế cho không gian sống hiện đại tại Việt Nam.
-            </p>
-            
-            <div className="space-y-3 text-sm text-gray-300">
-              <div className="flex items-start gap-3">
-                <MapPin className="w-5 h-5 text-[#D97706] shrink-0" />
-                <span>Địa chỉ: 70 Lữ Gia, Phường Phú Thọ, Tp.HCM</span>
+    <footer id="footer">
+      {/* Main Footer */}
+      <div
+        className="relative bg-contain bg-center bg-no-repeat pt-12"
+        style={{ backgroundImage: "url('/images/backgrounds/footer-bg.jpg')" }}
+      >
+        <div className="absolute inset-0 bg-[#1a1a2e]/90"></div>
+        <div className="container mx-auto px-4 py-8 md:py-12 relative z-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-8 lg:gap-10 text-white">
+            {/* Company Info */}
+            <div className="sm:col-span-2">
+              <div className="h-auto sm:h-[52px] flex items-start mb-4 sm:mb-0">
+                <h3 className="font-bold text-base sm:text-lg text-white relative inline-block uppercase">
+                  Thông tin liên hệ
+                  <span className="absolute -bottom-2 left-0 w-20 h-0.5 bg-gradient-to-r from-[#D4AF37] to-[#FFD966]"></span>
+                </h3>
               </div>
-              <div className="flex items-center gap-3">
-                <Phone className="w-5 h-5 text-[#D97706] shrink-0" />
-                <span>Điện thoại: <span className="text-[#D97706] font-bold">1900 6750</span></span>
-              </div>
-              <div className="flex items-center gap-3">
-                <Mail className="w-5 h-5 text-[#D97706] shrink-0" />
-                <span>Email: <span className="text-[#D97706]">support@sapo.vn</span></span>
+              <ul className="space-y-4 mt-4">
+                <li className="flex items-start gap-3">
+                  <MapPin className="w-5 h-5 text-[#D4AF37] flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-300 text-sm">
+                    Ngọc Trục, Đại Mỗ, Nam Từ Liêm, Hà Nội
+                  </span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <Phone className="w-5 h-5 text-[#D4AF37] flex-shrink-0 mt-0.5" />
+                  <Link
+                    href="tel:0976110266"
+                    className="text-gray-300 text-sm hover:text-[#D4AF37] transition-colors"
+                  >
+                    0976.110.266
+                  </Link>
+                </li>
+                <li className="flex items-start gap-3">
+                  <Mail className="w-5 h-5 text-[#D4AF37] flex-shrink-0 mt-0.5" />
+                  <Link
+                    href="mailto:nhualaysangeverestlight@gmail.com"
+                    className="text-gray-300 text-sm hover:text-[#D4AF37] transition-colors break-all"
+                  >
+                    nhualaysangeverestlight@gmail.com
+                  </Link>
+                </li>
+                <li className="flex items-start gap-3">
+                  <Globe className="w-5 h-5 text-[#D4AF37] flex-shrink-0 mt-0.5" />
+                  <Link
+                    href="https://nhualaysangeverestlight.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-300 text-sm hover:text-[#D4AF37] transition-colors"
+                  >
+                    https://nhualaysangeverestlight.com/
+                  </Link>
+                </li>
+                <li className="flex items-start gap-3">
+                  <Clock className="w-5 h-5 text-[#D4AF37] flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-300 text-sm">
+                    Thứ 2 - Thứ 7: 8:00 - 17:30
+                  </span>
+                </li>
+              </ul>
+              {/* Social Links */}
+              <div className="flex gap-3 mt-4">
+                <Link
+                  href="https://www.facebook.com/tamnhualaysangpoly/"
+                  target="_blank"
+                  className="w-8 h-8 flex items-center justify-center transition-all duration-300 group"
+                >
+                  <Image
+                    src="/icons/facebook_icon.svg"
+                    alt="Facebook"
+                    width={40}
+                    height={40}
+                    className="group-hover:scale-120 transition-transform duration-300"
+                  />
+                </Link>
+                <Link
+                  href="https://zalo.me/0976110266"
+                  target="_blank"
+                  className="w-8 h-8 flex items-center justify-center transition-all duration-300 group"
+                >
+                  <Image
+                    src="/icons/zalo_icon.svg"
+                    alt="Zalo"
+                    width={40}
+                    height={40}
+                    className="group-hover:scale-110 transition-transform duration-300"
+                  />
+                </Link>
               </div>
             </div>
-            
-            <div className="flex gap-4 pt-2">
-              <a href="#" className="w-10 h-10 rounded-full bg-white flex items-center justify-center hover:opacity-80 transition-opacity overflow-hidden">
-                <img src="/icons/facebook.svg" alt="Facebook" className="w-full h-full object-cover" />
-              </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-white flex items-center justify-center hover:opacity-80 transition-opacity overflow-hidden">
-                <img src="/icons/instagram.svg" alt="Instagram" className="w-full h-full object-cover" />
-              </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-white flex items-center justify-center hover:opacity-80 transition-opacity overflow-hidden">
-                <img src="/icons/tiktok.svg" alt="TikTok" className="w-full h-full object-cover" />
-              </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-white flex items-center justify-center hover:opacity-80 transition-opacity overflow-hidden">
-                <img src="/icons/shopee.svg" alt="Shopee" className="w-full h-full object-cover" />
-              </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-white flex items-center justify-center hover:opacity-80 transition-opacity overflow-hidden">
-                <img src="/icons/lazada.svg" alt="Lazada" className="w-full h-full object-cover" />
-              </a>
-            </div>
-          </div>
-
-          {/* Column 2: Links */}
-          <div className="md:col-span-4 flex gap-8">
-             <div className="flex-1">
-                <h4 className="font-bold text-lg mb-6 uppercase">Về chúng tôi</h4>
-                <ul className="space-y-3 text-sm text-gray-400">
-                  <li><a href="#" className="hover:text-[#D97706] transition-colors">Về chúng tôi</a></li>
-                  <li><a href="#" className="hover:text-[#D97706] transition-colors">Hệ thống cửa hàng</a></li>
-                  <li><a href="#" className="hover:text-[#D97706] transition-colors">Chính sách mua hàng</a></li>
-                  <li><a href="#" className="hover:text-[#D97706] transition-colors">Chính sách vận chuyển</a></li>
-                  <li><a href="#" className="hover:text-[#D97706] transition-colors">Hướng dẫn mua hàng</a></li>
-                  <li><a href="#" className="hover:text-[#D97706] transition-colors">Hướng dẫn trả góp</a></li>
-                  <li><a href="#" className="hover:text-[#D97706] transition-colors">Quy định bảo hành</a></li>
-                </ul>
-             </div>
-             <div className="flex-1 pt-12 md:pt-0">
-                <h4 className="font-bold text-lg mb-6 opacity-0 md:opacity-100">Liên hệ</h4>
-                <ul className="space-y-3 text-sm text-gray-400">
-                  <li><a href="#" className="hover:text-[#D97706] transition-colors">Liên hệ</a></li>
-                  <li><a href="#" className="hover:text-[#D97706] transition-colors">Hỏi đáp</a></li>
-                  <li><a href="#" className="hover:text-[#D97706] transition-colors">Chính sách đổi trả</a></li>
-                  <li><a href="#" className="hover:text-[#D97706] transition-colors">Chính sách thành viên</a></li>
-                  <li><a href="#" className="hover:text-[#D97706] transition-colors">Hướng dẫn chuyển khoản</a></li>
-                  <li><a href="#" className="hover:text-[#D97706] transition-colors">Hướng dẫn đổi trả</a></li>
-                  <li><a href="#" className="hover:text-[#D97706] transition-colors">Cam kết cửa hàng</a></li>
-                </ul>
-             </div>
-          </div>
-
-          {/* Column 3: Newsletter & Payment */}
-          <div className="md:col-span-4 space-y-8">
+            {/* Products */}
             <div>
-              <h4 className="font-bold text-lg mb-4 uppercase">Đăng ký nhận tin từ Sudes Craft</h4>
-              <p className="text-gray-400 text-sm mb-4">Nhận thông tin sản phẩm mới nhất và các chương trình khuyến mãi.</p>
-              <div className="relative">
-                <input 
-                  type="email" 
-                  placeholder="Nhập địa chỉ email" 
-                  className="w-full bg-white text-gray-800 px-4 py-3 rounded-full focus:outline-none focus:ring-2 focus:ring-[#D97706]"
-                />
-                <button className="absolute right-1 top-1 bottom-1 bg-[#D97706] hover:bg-[#B07D4E] text-white w-10 h-10 rounded-full flex items-center justify-center transition-colors">
-                  <Send size={18} />
-                </button>
+              <div className="h-auto sm:h-[52px] flex items-start mb-4 sm:mb-0">
+                <h3 className="font-bold text-base sm:text-lg text-white relative inline-block uppercase">
+                  Sản phẩm
+                  <span className="absolute -bottom-2 left-0 w-12 h-0.5 bg-gradient-to-r from-[#D4AF37] to-[#FFD966]"></span>
+                </h3>
               </div>
+              <ul className="space-y-2 sm:space-y-3 mt-4">
+                {productLinks.map((link) => (
+                  <li key={link.name}>
+                    <Link
+                      href={link.href}
+                      className="text-gray-300 text-sm hover:text-[#D4AF37] transition-colors flex items-center gap-1.5 group"
+                    >
+                      <ChevronRight className="w-4 h-4 flex-shrink-0 transition-opacity" />
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
 
+            {/* Quick Links */}
             <div>
-              <h4 className="font-bold text-lg mb-4 uppercase">Hỗ trợ thanh toán</h4>
-              <div className="flex flex-wrap gap-2">
-                <img src="/images/payment_1.webp" alt="Payment 1" className="h-8 w-auto rounded bg-white p-1" />
-                <img src="/images/payment_2.webp" alt="Payment 2" className="h-8 w-auto rounded bg-white p-1" />
-                <img src="/images/payment_3.webp" alt="Payment 3" className="h-8 w-auto rounded bg-white p-1" />
-                <img src="/images/payment_4.webp" alt="Payment 4" className="h-8 w-auto rounded bg-white p-1" />
-                <img src="/images/payment_5.webp" alt="Payment 5" className="h-8 w-auto rounded bg-white p-1" />
-                <img src="/images/payment_6.webp" alt="Payment 6" className="h-8 w-auto rounded bg-white p-1" />
+              <div className="h-auto sm:h-[52px] flex items-start mb-4 sm:mb-0">
+                <h3 className="font-bold text-base sm:text-lg text-white relative inline-block uppercase">
+                  Liên kết nhanh
+                  <span className="absolute -bottom-2 left-0 w-12 h-0.5 bg-gradient-to-r from-[#D4AF37] to-[#FFD966]"></span>
+                </h3>
               </div>
+              <ul className="space-y-2 sm:space-y-3 mt-4">
+                {companyLinks.map((link) => (
+                  <li key={link.name}>
+                    <Link
+                      href={link.href}
+                      className="text-gray-300 text-sm hover:text-[#D4AF37] transition-colors flex items-center gap-1.5 group"
+                    >
+                      <ChevronRight className="w-4 h-4 flex-shrink-0 transition-opacity" />
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
-            
-            <div>
-               <div className="bg-white p-2 rounded-lg inline-block">
-                 <div className="flex items-center gap-2">
-                   <div className="w-16 h-16 bg-gray-200 rounded flex items-center justify-center text-black text-xs">QR Code</div>
-                   <div className="text-black">
-                     <p className="font-bold text-sm text-[#D97706]">Zalo Mini App</p>
-                     <p className="text-xs">Quét mã QR để mua hàng nhanh chóng</p>
-                   </div>
-                 </div>
-               </div>
+
+            {/* Google Map */}
+            <div className="sm:col-span-2">
+              <div className="h-auto sm:h-[52px] flex items-start mb-4 sm:mb-0">
+                <h3 className="font-bold text-lg text-white relative inline-block uppercase">
+                  Bản đồ chỉ đường
+                  <span className="absolute -bottom-2 left-0 w-20 h-0.5 bg-gradient-to-r from-[#D4AF37] to-[#FFD966]"></span>
+                </h3>
+              </div>
+              <div className="rounded-lg overflow-hidden mt-4">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d1343.5808081052633!2d105.7682310972573!3d20.98611531548671!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMjDCsDU5JzEwLjEiTiAxMDXCsDQ2JzA1LjYiRQ!5e1!3m2!1sen!2s!4v1764660022570!5m2!1sen!2s"
+                  width="100%"
+                  height="200"
+                  className="h-[200px] sm:h-[250px] lg:h-[300px]"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Everest Light Location"
+                ></iframe>
+              </div>
             </div>
           </div>
         </div>
-        
-        <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500">
-          <p>© Bản quyền thuộc về <span className="font-bold text-white">Sudes Team</span> | Cung cấp bởi <span className="font-bold text-white">Sapo</span></p>
-          
-          <div className="flex gap-6">
-             <a href="#" className="hover:text-white">Bảo mật thông tin</a>
-             <a href="#" className="hover:text-white">Điều khoản & Điều lệ</a>
-             <a href="#" className="hover:text-white">Quyền riêng tư</a>
-          </div>
-          
-          <div className="flex gap-2">
-             {/* Certification Badges */}
-             <div className="h-8 w-20 bg-gray-700 rounded"></div>
-             <div className="h-8 w-20 bg-gray-700 rounded"></div>
+
+        {/* Bottom Bar */}
+        <div className="border-t border-gray-700/50 relative z-10">
+          <div className="max-w-7xl mx-auto px-4 py-5">
+            <div className="flex flex-col md:flex-row justify-center items-center gap-4">
+              <p className="text-gray-400 text-sm text-center md:text-left">
+                © 2025 Everest Light. Tất cả quyền được bảo lưu.
+              </p>
+            </div>
           </div>
         </div>
       </div>
-      
-      {/* Floating Buttons */}
-      <button className="fixed bottom-24 right-6 bg-white text-black p-3 rounded-full shadow-lg hover:scale-110 transition-transform z-50">
-         <ChevronUp size={24} />
-      </button>
-      <button className="fixed bottom-6 right-6 bg-[#D97706] text-white p-4 rounded-full shadow-lg hover:scale-110 transition-transform z-50 animate-bounce">
-         <MessageCircle size={24} />
-      </button>
     </footer>
   );
 }

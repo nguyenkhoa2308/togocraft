@@ -1,18 +1,23 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import { Home, Trash2, ShoppingBag, Heart } from "lucide-react";
 import { useWishlistStore } from "@/stores";
 import { useToastStore } from "@/stores/toastStore";
-import { useCartStore } from "@/stores";
-import { ConfirmDialog } from "@/components/ui";
+import { ConfirmDialog, QuickViewDialog } from "@/components/ui";
+import { getAllProducts } from "@/lib/data/polycarbonate-data";
+import type { Product } from "@/components/ui/ProductCard";
 
 const WishlistPage = () => {
   const items = useWishlistStore((state) => state.items);
-  const removeFromWishlist = useWishlistStore((state) => state.removeFromWishlist);
-  const addToCart = useCartStore((state) => state.addToCart);
+  const removeFromWishlist = useWishlistStore(
+    (state) => state.removeFromWishlist
+  );
   const addToast = useToastStore((state) => state.addToast);
+
+  // Get all products to find full product data
+  const allProducts = useMemo(() => getAllProducts(), []);
 
   const [confirmDialog, setConfirmDialog] = useState<{
     isOpen: boolean;
@@ -24,17 +29,21 @@ const WishlistPage = () => {
     itemName: "",
   });
 
-  const handleAddToCart = (item: typeof items[0]) => {
-    addToCart({
-      id: item.id,
-      name: item.name,
-      price: item.price,
-      image: item.image,
-    });
-    addToast(`Đã thêm "${item.name}" vào giỏ hàng`, "success");
+  // QuickView state
+  const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
+
+  const handleAddToCart = (item: (typeof items)[0]) => {
+    // Find full product data to show QuickViewDialog with colors
+    const fullProduct = allProducts.find((p) => p.id === item.id);
+    if (fullProduct) {
+      setQuickViewProduct(fullProduct as Product);
+    } else {
+      // Fallback: show toast if product not found
+      addToast("Không tìm thấy thông tin sản phẩm", "error");
+    }
   };
 
-  const handleRemoveClick = (item: typeof items[0]) => {
+  const handleRemoveClick = (item: (typeof items)[0]) => {
     setConfirmDialog({
       isOpen: true,
       itemId: item.id,
@@ -45,7 +54,10 @@ const WishlistPage = () => {
   const handleConfirmRemove = () => {
     if (confirmDialog.itemId) {
       removeFromWishlist(confirmDialog.itemId);
-      addToast(`Đã xóa "${confirmDialog.itemName}" khỏi danh sách yêu thích`, "info");
+      addToast(
+        `Đã xóa "${confirmDialog.itemName}" khỏi danh sách yêu thích`,
+        "info"
+      );
     }
     setConfirmDialog({ isOpen: false, itemId: null, itemName: "" });
   };
@@ -55,15 +67,15 @@ const WishlistPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20">
+    <div className="min-h-screen bg-[#FDFBF7] pb-20">
       {/* Hero Banner */}
       <div
         className="relative h-48 bg-cover bg-center"
         style={{
-          backgroundImage: "url('/images/breadcrumb_bg.webp')",
+          backgroundImage: "url('/images/banners/tam-lop-dac.jpg')",
         }}
       >
-        <div className="absolute inset-0 bg-black/30" />
+        <div className="absolute inset-0 bg-black/50" />
         <div className="container mx-auto px-4 h-full flex flex-col justify-center relative z-10">
           <h1 className="text-4xl font-bold text-white mb-2">Yêu thích</h1>
           <div className="flex items-center gap-2 text-white/90 text-sm">
@@ -88,8 +100,8 @@ const WishlistPage = () => {
               Danh sách yêu thích của bạn đang trống
             </p>
             <Link
-              href="/"
-              className="inline-block bg-[#C59263] hover:bg-[#B07D4E] text-white px-8 py-3 rounded-full font-semibold transition-colors"
+              href="/categories/all"
+              className="inline-block bg-[#D97706] hover:bg-[#C77A06] text-white px-8 py-3 rounded-full font-semibold transition-colors"
             >
               Khám phá sản phẩm
             </Link>
@@ -98,7 +110,9 @@ const WishlistPage = () => {
           <>
             <div className="mb-6 flex items-center justify-between">
               <p className="text-gray-600">
-                Bạn có <span className="font-bold text-[#C59263]">{items.length}</span> sản phẩm yêu thích
+                Bạn có{" "}
+                <span className="font-bold text-[#D97706]">{items.length}</span>{" "}
+                sản phẩm yêu thích
               </p>
             </div>
 
@@ -109,7 +123,10 @@ const WishlistPage = () => {
                   className="bg-white rounded-xl shadow-sm overflow-hidden group hover:shadow-lg transition-shadow"
                 >
                   {/* Image */}
-                  <div className="aspect-square relative overflow-hidden bg-gray-100">
+                  <Link
+                    href={`/product/${item.slug}`}
+                    className="block aspect-square relative overflow-hidden bg-gray-100"
+                  >
                     <img
                       src={item.image}
                       alt={item.name}
@@ -120,20 +137,23 @@ const WishlistPage = () => {
                         Giảm giá
                       </div>
                     )}
-                  </div>
+                  </Link>
 
                   {/* Info */}
                   <div className="p-4">
-                    <h3 className="font-medium text-gray-800 line-clamp-2 mb-2 min-h-[48px]">
+                    <Link
+                      href={`/product/${item.slug}`}
+                      className="font-medium text-gray-800 line-clamp-2 mb-2 min-h-[48px] block hover:text-[#D97706] transition-colors"
+                    >
                       {item.name}
-                    </h3>
+                    </Link>
                     <div className="flex items-center gap-2 mb-4">
                       {item.oldPrice && (
                         <span className="text-gray-400 text-sm line-through">
                           {item.oldPrice}
                         </span>
                       )}
-                      <span className="text-[#C59263] font-bold text-lg">
+                      <span className="text-[#D97706] font-bold text-lg">
                         {item.price}
                       </span>
                     </div>
@@ -142,7 +162,7 @@ const WishlistPage = () => {
                     <div className="flex gap-2">
                       <button
                         onClick={() => handleAddToCart(item)}
-                        className="flex-1 flex items-center justify-center gap-2 bg-[#C59263] hover:bg-[#B07D4E] text-white py-2.5 rounded-lg font-medium transition-colors text-sm"
+                        className="flex-1 flex items-center justify-center gap-2 bg-[#D97706] hover:bg-[#C77A06] text-white py-2.5 rounded-lg font-medium transition-colors text-sm"
                       >
                         <ShoppingBag size={16} />
                         Thêm vào giỏ
@@ -172,6 +192,13 @@ const WishlistPage = () => {
         onConfirm={handleConfirmRemove}
         onCancel={handleCancelRemove}
         type="danger"
+      />
+
+      {/* QuickView Dialog for color selection */}
+      <QuickViewDialog
+        isOpen={!!quickViewProduct}
+        product={quickViewProduct}
+        onClose={() => setQuickViewProduct(null)}
       />
     </div>
   );

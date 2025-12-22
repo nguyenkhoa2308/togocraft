@@ -1,192 +1,81 @@
 "use client";
 
 import React, { useState } from "react";
-import {
-  ChevronDown,
-  Grid,
-  ChevronRight,
-  Package,
-  Lamp,
-  Armchair,
-  ShoppingBag,
-  Gem,
-  LayoutGrid,
-  Flower2,
-  Gift,
-  Layers,
-} from "lucide-react";
+import { ChevronDown, ChevronRight, Layers, Wrench } from "lucide-react";
 import Link from "next/link";
 
-// Mock Data based on the image
-const CATEGORIES = [
+// Reorganized categories - Tấm lợp as main with subcategories
+interface SubCategory {
+  name: string;
+  href: string;
+  description: string;
+  image: string;
+}
+
+interface Category {
+  id: string;
+  name: string;
+  href: string;
+  icon: React.ElementType;
+  subCategories: SubCategory[];
+  image: string;
+}
+
+const CATEGORIES: Category[] = [
   {
-    id: "gio-khay",
-    name: "Giỏ & Khay Đựng Đồ",
-    href: "/categories/trays",
-    icon: Package,
+    id: "tam-lop",
+    name: "Tấm lợp Polycarbonate",
+    href: "/categories/all",
+    icon: Layers,
+    image: "/images/banners/tam-lop-dac.jpg",
     subCategories: [
       {
-        title: "Giỏ Lưu Trữ Thủ Công",
-        items: [
-          "Giỏ Đựng Đồ Cá Nhân",
-          "Giỏ Đựng Quần Áo",
-          "Giỏ Lưu Trữ Văn Phòng",
-          "Giỏ Trang Trí Góc Nhà",
-        ],
+        name: "Polycarbonate đặc (Solid)",
+        href: "/categories/polycarbonate_dac",
+        description: "Trong suốt như kính, bền gấp 200 lần",
+        image: "/images/banners/tam-lop-dac.jpg",
       },
       {
-        title: "Khay Trang Trí & Phục Vụ",
-        items: [
-          "Khay Gỗ Tự Nhiên",
-          "Khay Mây Đan Decor",
-          "Khay Phục Vụ Trà & Cafe",
-          "Khay Bày Biện Bàn Ăn",
-        ],
+        name: "Polycarbonate sóng (Corrugated)",
+        href: "/categories/polycarbonate_song",
+        description: "Dạng sóng, độ cứng cao, chống ồn tốt",
+        image: "/images/banners/tam-lop-song.jpg",
       },
       {
-        title: "Hộp Đan Tay & Giỏ Có Nắp",
-        items: [
-          "Hộp Trang Sức Thủ Công",
-          "Hộp Lưu Giữ Mini",
-          "Giỏ Nắp Đậy Đa Năng",
-          "Bộ Hộp Decor Handmade",
-        ],
-      },
-      {
-        title: "Bộ Giỏ Quà & Set Decor",
-        items: [
-          "Giỏ Quà Decor Handmade",
-          "Giỏ Quà Thư Giãn & Spa",
-          "Giỏ Quà Mùa Lễ & Dịp Đặc Biệt",
-          "Set Giỏ Decor Trang Trí",
-        ],
+        name: "Polycarbonate rỗng (Multiwall)",
+        href: "/categories/polycarbonate_rong",
+        description: "Cách nhiệt tốt, nhẹ, tiết kiệm chi phí",
+        image: "/images/banners/tam-lop-rong.jpg",
       },
     ],
-    image:
-      "https://images.unsplash.com/photo-1590736969955-71cc94801759?w=600&auto=format&fit=crop&q=80",
   },
   {
-    id: "den-may-tre",
-    name: "Đèn Mây Tre Trang Trí",
-    href: "/categories/lamps",
-    icon: Lamp,
-    subCategories: [
-      {
-        title: "Đèn Thả Trần",
-        items: ["Đèn Thả Bàn Ăn", "Đèn Thả Phòng Khách", "Đèn Lồng Mây Tre"],
-      },
-      {
-        title: "Đèn Để Bàn & Đèn Sàn",
-        items: ["Đèn Ngủ Để Bàn", "Đèn Sàn Góc Sofa", "Đèn Đọc Sách"],
-      },
-    ],
-    image:
-      "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=600&auto=format&fit=crop&q=80",
-  },
-  {
-    id: "do-noi-that",
-    name: "Đồ Nội Thất Tự Nhiên",
-    href: "/categories/shelves",
-    icon: Armchair,
+    id: "phu_kien",
+    name: "Phụ kiện lắp đặt",
+    href: "/categories/phu_kien",
+    icon: Wrench,
+    image: "/images/products/phu-kien.jpg",
     subCategories: [],
-    image:
-      "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&auto=format&fit=crop&q=80",
-  },
-  {
-    id: "phu-kien",
-    name: "Phụ Kiện Thời Trang Thủ Công",
-    href: "/categories/bags",
-    icon: ShoppingBag,
-    subCategories: [],
-    image:
-      "https://images.unsplash.com/photo-1615529182904-14819c35db37?w=600&auto=format&fit=crop&q=80",
-  },
-  {
-    id: "guong",
-    name: "Gương Trang Trí",
-    href: "/categories/shelves",
-    icon: Gem,
-    subCategories: [],
-    image:
-      "https://images.unsplash.com/photo-1618220179428-22790b461013?w=600&auto=format&fit=crop&q=80",
-  },
-  {
-    id: "ke-gia-treo",
-    name: "Kệ & Giá Treo Decor",
-    href: "/categories/shelves",
-    icon: LayoutGrid,
-    subCategories: [],
-    image:
-      "https://images.unsplash.com/photo-1595428774223-ef52624120d2?w=600&auto=format&fit=crop&q=80",
-  },
-  {
-    id: "trang-tri-tuong",
-    name: "Trang Trí Tường",
-    href: "/categories/shelves",
-    icon: Layers,
-    subCategories: [],
-    image:
-      "https://images.unsplash.com/photo-1507652313519-d4e9174996dd?w=600&auto=format&fit=crop&q=80",
-  },
-  {
-    id: "lo-hoa",
-    name: "Lọ Hoa & Chậu Cây Decor",
-    href: "/categories/trays",
-    icon: Flower2,
-    subCategories: [],
-    image:
-      "https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=600&auto=format&fit=crop&q=80",
-  },
-  {
-    id: "qua-tang",
-    name: "Quà Tặng Thủ Công",
-    href: "/categories/gifts",
-    icon: Gift,
-    subCategories: [],
-    image:
-      "https://images.unsplash.com/photo-1513201099705-a9746e1e201f?w=600&auto=format&fit=crop&q=80",
-  },
-  {
-    id: "bo-suu-tap",
-    name: "Bộ Sưu Tập",
-    href: "/collections",
-    icon: Layers,
-    subCategories: [],
-    image:
-      "https://images.unsplash.com/photo-1533090161767-e6ffed986c88?w=600&auto=format&fit=crop&q=80",
   },
 ];
 
 const CategoryMenu = () => {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
-  const timeoutRef = React.useRef<NodeJS.Timeout | null>(null);
-
-  const handleMouseEnter = (categoryId: string) => {
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    timeoutRef.current = setTimeout(() => {
-      setActiveCategory(categoryId);
-    }, 300); // 300ms delay
-  };
-
-  const handleMouseLeave = () => {
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    // Optional: Add delay for hiding too, or keep it instant/controlled by submenu enter
-  };
-
-  const handleSubMenuEnter = () => {
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
-  };
+  const [hoveredSubIndex, setHoveredSubIndex] = useState<number | null>(null);
 
   return (
     <div
       className="relative group z-50"
       onMouseLeave={() => {
-        if (timeoutRef.current) clearTimeout(timeoutRef.current);
         setActiveCategory(null);
+        setHoveredSubIndex(null);
       }}
     >
       {/* Trigger Button */}
-      <button className="flex items-center gap-2 bg-white border rounded-xl px-4 py-2 text-[#4B5563] hover:text-[#D97706] transition-all shadow-sm border-2 border-[#c88948]">
+      <button
+        type="button"
+        className="flex items-center gap-2 bg-white border rounded-xl px-4 py-2 text-[#4B5563] hover:text-[#D97706] transition-all shadow-sm border-2 border-[#c88948]"
+      >
         <svg
           className="w-4 h-4 mr-1 text-[#c88948]"
           enableBackground="new 0 0 100 100"
@@ -214,90 +103,128 @@ const CategoryMenu = () => {
         <ChevronDown size={16} />
       </button>
 
-      {/* Bridge to prevent menu closing when moving from button to dropdown */}
+      {/* Bridge to prevent menu closing */}
       <div className="absolute top-full left-0 w-full h-2 bg-transparent"></div>
 
-      {/* Main Dropdown - Category List */}
+      {/* Main Dropdown */}
       <div className="absolute top-full left-0 w-[280px] bg-white shadow-xl rounded-lg mt-2 hidden group-hover:block border border-gray-100 py-2">
         {CATEGORIES.map((category) => (
-          <Link
+          <div
             key={category.id}
-            href={category.href}
-            onMouseEnter={() => handleMouseEnter(category.id)}
-            onMouseLeave={handleMouseLeave}
-            className={`flex items-center justify-between px-4 py-2.5 cursor-pointer transition-colors relative ${
-              activeCategory === category.id
-                ? "bg-[#FFF7ED] text-[#D97706]"
-                : "text-gray-600 hover:bg-gray-50 hover:text-[#D97706]"
-            }`}
+            onMouseEnter={() => {
+              setActiveCategory(category.id);
+              setHoveredSubIndex(null);
+            }}
+            className="relative"
           >
-            <div className="flex items-center gap-3">
-              <category.icon size={18} strokeWidth={1.5} />
-              <span className="text-sm font-medium">{category.name}</span>
-            </div>
-            {activeCategory === category.id && <ChevronRight size={16} />}
-          </Link>
+            <Link
+              href={category.href}
+              className={`flex items-center justify-between px-4 py-2.5 transition-colors ${
+                activeCategory === category.id
+                  ? "bg-[#FFF7ED] text-[#D97706]"
+                  : "text-gray-600 hover:bg-gray-50 hover:text-[#D97706]"
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <category.icon size={18} strokeWidth={1.5} />
+                <span className="text-sm font-medium">{category.name}</span>
+              </div>
+              {category.subCategories.length > 0 && <ChevronRight size={16} />}
+            </Link>
+          </div>
         ))}
 
-        {/* Sub-menu Panel - Appears to the right */}
-        {activeCategory && (
-          <div
-            className="absolute top-0 left-[100%] w-[800px] h-full min-h-[450px] bg-white shadow-xl rounded-r-lg border-y border-r border-gray-100 ml-1 z-50 flex overflow-hidden"
-            onMouseEnter={handleSubMenuEnter}
-            onMouseLeave={() => setActiveCategory(null)}
-          >
-            {/* Invisible Bridge for safe hovering */}
-            <div className="absolute inset-y-0 -left-4 w-4 bg-transparent"></div>
+        {/* Sub-menu Panel */}
+        {activeCategory &&
+          (CATEGORIES.find((c) => c.id === activeCategory)?.subCategories
+            .length ?? 0) > 0 && (
+            <div
+              className="absolute top-0 left-full w-[500px] bg-white shadow-xl rounded-r-lg border border-l-0 border-gray-100 ml-0 z-50 overflow-hidden"
+              onMouseEnter={() => {
+                const cat = CATEGORIES.find((c) => c.id === activeCategory);
+                if (cat) setActiveCategory(cat.id);
+              }}
+            >
+              {(() => {
+                const category = CATEGORIES.find(
+                  (c) => c.id === activeCategory
+                );
+                if (!category) return null;
 
-            {(() => {
-              const category = CATEGORIES.find((c) => c.id === activeCategory);
-              if (!category) return null;
-
-              return (
-                <div className="flex w-full">
-                  {/* Sub-categories Grid */}
-                  <div className="flex-1 p-6 grid grid-cols-2 gap-x-8 gap-y-6 content-start overflow-y-auto">
-                    {category.subCategories.length > 0 ? (
-                      category.subCategories.map((sub, idx) => (
-                        <div key={idx}>
-                          <h3 className="font-bold text-gray-800 mb-3 text-sm">
-                            {sub.title}
-                          </h3>
-                          <ul className="space-y-2">
-                            {sub.items.map((item, i) => (
-                              <li key={i}>
-                                <Link
-                                  href="#"
-                                  className="text-sm text-gray-500 hover:text-[#D97706] transition-colors block"
-                                >
-                                  » {item}
-                                </Link>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      ))
-                    ) : (
-                      <div className="col-span-2 text-gray-400 italic">
-                        Đang cập nhật danh mục con...
+                return (
+                  <div className="flex">
+                    {/* Sub-categories List */}
+                    <div className="flex-1 p-4">
+                      <h3 className="font-bold text-[#4A3B32] mb-3 text-sm uppercase tracking-wide">
+                        {category.name}
+                      </h3>
+                      <div className="space-y-1">
+                        {category.subCategories.map((sub, idx) => (
+                          <Link
+                            key={idx}
+                            href={sub.href}
+                            onMouseEnter={() => setHoveredSubIndex(idx)}
+                            onMouseLeave={() => setHoveredSubIndex(null)}
+                            className={`block p-3 rounded-lg transition-colors ${
+                              hoveredSubIndex === idx
+                                ? "bg-[#FFF7ED]"
+                                : "hover:bg-[#FFF7ED]"
+                            }`}
+                          >
+                            <div
+                              className={`font-medium text-sm ${
+                                hoveredSubIndex === idx
+                                  ? "text-[#D97706]"
+                                  : "text-gray-800 hover:text-[#D97706]"
+                              }`}
+                            >
+                              {sub.name}
+                            </div>
+                            <div className="text-xs text-gray-500 mt-0.5">
+                              {sub.description}
+                            </div>
+                          </Link>
+                        ))}
                       </div>
-                    )}
-                  </div>
 
-                  {/* Featured Image */}
-                  <div className="w-[300px] h-full relative">
-                    <img
-                      src={category.image}
-                      alt={category.name}
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-black/10"></div>
+                      {/* View all link */}
+                      <Link
+                        href={category.href}
+                        className="inline-flex items-center gap-1 mt-4 text-sm text-[#D97706] hover:underline font-medium"
+                      >
+                        Xem tất cả sản phẩm
+                        <ChevronRight size={14} />
+                      </Link>
+                    </div>
+
+                    {/* Featured Image - changes on subcategory hover with fade */}
+                    <div className="w-[180px] relative overflow-hidden">
+                      {/* Stack all images and fade in/out */}
+                      {category.subCategories.map((sub, idx) => (
+                        <img
+                          key={idx}
+                          src={sub.image}
+                          alt={sub.name}
+                          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${
+                            hoveredSubIndex === idx ? "opacity-100" : "opacity-0"
+                          }`}
+                        />
+                      ))}
+                      {/* Default image when no subcategory is hovered */}
+                      <img
+                        src={category.image}
+                        alt={category.name}
+                        className={`w-full h-full object-cover transition-opacity duration-300 ${
+                          hoveredSubIndex === null ? "opacity-100" : "opacity-0"
+                        }`}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent pointer-events-none"></div>
+                    </div>
                   </div>
-                </div>
-              );
-            })()}
-          </div>
-        )}
+                );
+              })()}
+            </div>
+          )}
       </div>
     </div>
   );

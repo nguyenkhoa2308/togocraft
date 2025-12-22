@@ -3,6 +3,7 @@ import { persist } from "zustand/middleware";
 
 export interface WishlistItem {
   id: number | string;
+  slug: string;
   name: string;
   price: string;
   oldPrice?: string;

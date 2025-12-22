@@ -9,6 +9,7 @@ import "./globals.css";
 import { Footer, Header, NavigationBar, TopBar } from "@/components";
 import { ServiceHighlights } from "@/components/home";
 import Providers from "@/components/Providers";
+import FloatingButtons from "@/components/ui/FloatingButtons";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -53,6 +54,7 @@ export default function RootLayout({
 
           <main className="min-h-screen">{children}</main>
           <ServiceHighlights />
+          <FloatingButtons />
           <Footer />
         </Providers>
       </body>

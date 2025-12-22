@@ -3,6 +3,7 @@ import { persist } from "zustand/middleware";
 
 export interface CartItem {
   id: number | string;
+  slug: string;
   name: string;
   price: string;
   image: string;
@@ -81,3 +82,10 @@ export const useCartTotalPrice = () =>
   useCartStore((state) =>
     state.items.reduce((sum, item) => sum + parsePrice(item.price) * item.quantity, 0)
   );
+
+// Check if item with same id and color already in cart
+export const useIsInCart = () => {
+  const items = useCartStore((state) => state.items);
+  return (id: number | string, selectedColor?: string) =>
+    items.some((item) => item.id === id && item.selectedColor === selectedColor);
+};

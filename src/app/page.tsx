@@ -1,64 +1,69 @@
 import {
   Hero,
-  SaleSection,
   CouponSection,
   FeaturedProducts,
-  NewCollection,
   CategoryShowcase,
   StorySection,
   Testimonials,
   TikTokSection,
-  NewsSection,
 } from "@/components/home";
 import {
-  gioKhayProducts,
-  denMayProducts,
-  decorProducts,
-} from "@/lib/data/products";
+  polycarbonateDocProducts,
+  polycarbonateSongProducts,
+  polycarbonateRongProducts,
+  phuKienProducts,
+} from "@/lib/data/polycarbonate-data";
 
 export default function Home() {
   return (
     <div className="bg-white pb-20">
       <Hero />
-      <SaleSection />
+      {/* <SaleSection /> */}
       <CouponSection />
       <FeaturedProducts />
-      <NewCollection />
 
       <CategoryShowcase
-        title="Giỏ & Khay Đan Tay"
-        subtitle="THỦ CÔNG SUDES CRAFT"
-        description="Từng sợi mây đan thủ công, lưu giữ vẻ tự nhiên và tiện dụng cho không gian sống."
-        bannerImage="/images/section_pro_1_banner_1.webp"
-        products={gioKhayProducts}
-        categorySlug="trays"
+        title="Polycarbonate Đặc"
+        subtitle="TẤM LỢP LẤY SÁNG EVEREST LIGHT"
+        description="Trong suốt như kính, bền gấp 200 lần, chống UV tuyệt đối - Giải pháp lấy sáng hiện đại cho mọi công trình."
+        bannerImage="/images/banners/tam-lop-dac.jpg"
+        products={polycarbonateDocProducts}
+        categorySlug="polycarbonate-dac"
       />
 
       <CategoryShowcase
-        title="Đèn Mây Tre Trang Trí"
-        subtitle="THỦ CÔNG SUDES CRAFT"
-        description="Ánh sáng len qua sợi mây, mang hơi thở thiên nhiên và sự ấm áp đến từng góc nhỏ."
-        bannerImage="/images/section_pro_2_banner_1.webp"
-        products={denMayProducts}
-        categorySlug="lamps"
+        title="Polycarbonate Sóng"
+        subtitle="TẤM LỢP LẤY SÁNG EVEREST LIGHT"
+        description="Tấm lợp dạng sóng chống nóng, chống UV, độ bền cao - Lựa chọn hoàn hảo cho mái nhà xưởng, nhà kho."
+        bannerImage="/images/banners/tam-lop-song.jpg"
+        products={polycarbonateSongProducts}
+        categorySlug="polycarbonate-song"
         reverse={true}
       />
 
       <StorySection />
 
       <CategoryShowcase
-        title="Đồ Decor Tự Nhiên"
-        subtitle="THỦ CÔNG SUDES CRAFT"
-        description="Mộc mạc, tinh tế và nghệ thuật – tôn vinh vẻ đẹp tự nhiên trong không gian sống."
-        bannerImage="/images/section_pro_3_banner_1.webp"
-        products={decorProducts}
-        categorySlug="shelves"
+        title="Polycarbonate Rỗng"
+        subtitle="TẤM LỢP LẤY SÁNG EVEREST LIGHT"
+        description="Cấu trúc rỗng cách nhiệt tốt, nhẹ và dễ thi công - Phù hợp cho giếng trời, mái che sân vườn."
+        bannerImage="/images/banners/tam-lop-rong.jpg"
+        products={polycarbonateRongProducts}
+        categorySlug="polycarbonate-rong"
+      />
+
+      <CategoryShowcase
+        title="Phụ Kiện Lắp Đặt"
+        subtitle="TẤM LỢP LẤY SÁNG EVEREST LIGHT"
+        description="Đầy đủ phụ kiện chính hãng: nẹp, ốc vít, ron cao su - Đảm bảo thi công chuẩn kỹ thuật."
+        bannerImage="/images/banners/phu-kien.jpg"
+        products={phuKienProducts}
+        categorySlug="phu-kien"
         reverse={true}
       />
 
-      <Testimonials />
       <TikTokSection />
-      <NewsSection />
+      <Testimonials />
     </div>
   );
 }

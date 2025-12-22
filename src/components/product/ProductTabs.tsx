@@ -234,7 +234,7 @@ const ProductTabs: React.FC<ProductTabsProps> = ({
                           value={reviewComment}
                           onChange={(e) => setReviewComment(e.target.value)}
                           rows={4}
-                          className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#C59263] focus:border-transparent resize-none"
+                          className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#C59263] focus:border-transparent resize-none text-gray-800 placeholder:text-gray-400 bg-white"
                           placeholder="Chia sẻ trải nghiệm của bạn về sản phẩm này..."
                         />
                       </div>
